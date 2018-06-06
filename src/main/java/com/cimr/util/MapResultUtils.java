@@ -4,7 +4,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mongodb.util.JSON;
+
 public class MapResultUtils {
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(MapResultUtils.class);
+
 
 	private static Map<String,Object> parseResultMapIncludeFields(Map<String,Object> map,String[] fields) {
 		Map<String,Object> res = new HashMap<>();
@@ -53,7 +62,13 @@ public class MapResultUtils {
 		return res;
 	}
 	
-	
+	/**
+	 * 
+	 * @param map
+	 * @param fields
+	 * @param type
+	 * @return
+	 */
 	public static Map<String,Object> getList(Map<String,Object> map,String[] fields,int type){
 		Map<String,Object> res = null ;
 		if(fields!=null && fields.length>0) {
@@ -156,5 +171,33 @@ public class MapResultUtils {
 				return true;
 			}
 		}
+	}
+	
+	
+	/**
+	 * 处理redis查询到的数据
+	 * 支持map 以及json字符串
+	 * @param obj
+	 * @return 数据为空或数据类型不支持返回null 
+	 * 其他返回map对象 对应redis 的key-value
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String,Object> parseRedisObject(Object obj) {
+		
+		Map<String,Object> out =null;
+		if(obj==null) {
+			log.info("查询数据为空");
+			return out;
+		}
+		if(obj instanceof Map) {
+			out = (Map<String,Object>) obj;
+		}else if(obj instanceof String) {
+			out = (Map<String, Object>) JSON.parse((String)obj);
+			
+		}else {
+			log.error("暂时不支持除String 以及 map 类型外的redis对象");
+		}
+		
+		return out;
 	}
 }

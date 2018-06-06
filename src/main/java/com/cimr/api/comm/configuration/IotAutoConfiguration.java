@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.cimr.api.code.config.CodeProperties;
+import com.cimr.api.code.config.RedisProperties;
 import com.cimr.api.websocket.config.WebSocketProperties;
 
 @Configuration
@@ -22,4 +23,10 @@ public class IotAutoConfiguration {
     public CodeProperties codeProperties() {
         return new CodeProperties();
     }
+	
+	@Bean
+    @ConditionalOnMissingBean
+	public RedisProperties redisProperties() {
+		return new RedisProperties();
+	}
 }

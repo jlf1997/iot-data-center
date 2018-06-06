@@ -92,15 +92,15 @@ public class RealTimeDateService {
 //	}
 	  
 	public List<Map<String,Object>> getAllDate(List<TerimalModel> termimals,String signal){
-		return terRealDataDao.getDate(termimals, signal, 0);
+		return terRealDataDao.getData(termimals, signal, 0);
 	}
 	
 	public List<Map<String,Object>> getAllDateInclude(List<TerimalModel> termimals,String signal,String...fields){
-		return terRealDataDao.getDate(termimals, signal, 1,fields);
+		return terRealDataDao.getData(termimals, signal, 1,fields);
 	} 
 	
 	public List<Map<String,Object>> getAllDateExclude(List<TerimalModel> termimals,String signal,String...fields){
-		return terRealDataDao.getDate(termimals, signal, -1,fields);
+		return terRealDataDao.getData(termimals, signal, -1,fields);
 	}
 
 
@@ -115,10 +115,26 @@ public class RealTimeDateService {
 	 * @param countFields
 	 * @return
 	 */
-	public List<Map<String, Object>> getDateBoolean(List<TerimalModel> termimals, String signal, String includeType,
+	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal, String includeType,
 			String[] fields, String countIncludeType, String[] countFields) {
 		// TODO Auto-generated method stub
-		return terRealDataDao.getDateBoolean(termimals, signal, includeType, fields,countIncludeType,countFields);
+		return terRealDataDao.getDataBoolean(termimals, signal, includeType, fields,countIncludeType,countFields);
+	} 
+	
+	/**
+	 * 
+	 * @param termimals
+	 * @param signal
+	 * @param includeType
+	 * @param includeType2
+	 * @param countIncludeType
+	 * @param countFields
+	 * @return
+	 */
+	public List<Map<String, Object>> getData(List<TerimalModel> termimals, String signal, String includeType,
+			String[] fields) {
+		// TODO Auto-generated method stub
+		return terRealDataDao.getData(termimals, signal, includeType, fields);
 	} 
 	  
     

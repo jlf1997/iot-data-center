@@ -20,7 +20,7 @@ public class CodeProperties {
 	 */
 	private String topicReciveRealData = "DATA_PUBLISH";
 	
-	public static final String NEW_DATA = "NEW_DATA_";
+	
 	
 
 	public Long getSubscribeTimeMill() {
@@ -46,6 +46,8 @@ public class CodeProperties {
 	public void setTopicReciveRealData(String topicReciveRealData) {
 		this.topicReciveRealData = topicReciveRealData;
 	}
+
+	
 	
 	
 	

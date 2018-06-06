@@ -58,27 +58,29 @@ public class RedisTemplateConfig {
 	 * @return
 	 */
 
-	 public <String, V> RedisTemplate<String, V> getFastJsonStringTemplate(Class<V> clazz) {
+	 public <String, V> RedisTemplate<String, V> getFastJsonStringTemplate(int databaseIndex,Class<V> clazz) {
 	        RedisTemplate<String, V> redisTemplate = new RedisTemplate<String, V>();
+//	        factory.setDatabase(databaseIndex);
 	        redisTemplate.setConnectionFactory(factory);
 	        redisTemplate.setKeySerializer(new StringRedisSerializer());
 	        redisTemplate.setValueSerializer(new FastJsonRedisSerializer<V>(clazz));
 	        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-	        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+	        redisTemplate.setHashValueSerializer(new StringRedisSerializer());	
+	       
 	        // 不是注入方法的话，必须调用它。Spring注入的话，会在注入时调用
 	        redisTemplate.afterPropertiesSet();
 
 	        return redisTemplate;
 	  }
 	 
-	 @Bean
-	 public RedisTemplate getDefaultRedisTemplate() {
-		
-		 RedisTemplate<String, HashMap> redisTemplate ;
-		 redisTemplate =
-				 getFastJsonStringTemplate(HashMap.class);
-		 return redisTemplate;
-	 }
+//	 @Bean
+//	 public RedisTemplate getDefaultRedisTemplate() {
+//		
+//		 RedisTemplate<String, HashMap> redisTemplate ;
+//		 redisTemplate =
+//				 getFastJsonStringTemplate(0,HashMap.class);
+//		 return redisTemplate;
+//	 }
 	 
 	 @Bean
 	 public HashMapper getDefaultMapper() {

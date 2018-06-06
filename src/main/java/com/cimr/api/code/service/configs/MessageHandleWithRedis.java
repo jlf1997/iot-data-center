@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.hash.HashMapper;
 
 import com.alibaba.fastjson.JSON;
+import com.cimr.api.code.config.RedisProperties;
 import com.cimr.api.code.model.Message;
 import com.cimr.boot.redis.RedisTemplateConfig;
 import com.cimr.boot.redis.utils.MyHashMapper;
@@ -25,6 +26,9 @@ public class MessageHandleWithRedis extends AbstractMessageHandle{
 	private HashMapper<String, String, String> mapper;
 	private RedisTemplate<String, String> redisTemplate;
 	
+	@Autowired
+	private RedisProperties redisProperties;
+	
 	
 	@Autowired
 	private RedisTemplateConfig redisTemplateConfig;
@@ -32,7 +36,7 @@ public class MessageHandleWithRedis extends AbstractMessageHandle{
     @PostConstruct
     public void demoPostConstruct() {
     	redisTemplate =
-        		redisTemplateConfig.getFastJsonStringTemplate(String.class);
+        		redisTemplateConfig.getFastJsonStringTemplate(redisProperties.getMessageTempIndex(),String.class);
         mapper =  MyHashMapper.getInstance(String.class, String.class, String.class);
     }
 

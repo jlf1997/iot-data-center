@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 
-@Api(description="设备相关操作",tags= {"terminal"})
+@Api(description="项目信号相关操作",tags= {"terminal"})
 @RestController
 @RequestMapping("/dev")
 public class TerminalController {
@@ -40,12 +40,12 @@ public class TerminalController {
 	@ApiOperation(value = "根据id查询单台设备信息", notes = ""			
 			)	  
 	@ApiImplicitParams({ 
-		@ApiImplicitParam(paramType = "path", dataType = "String", name = "id", value = "信息id", required = true) }
+		@ApiImplicitParam(paramType = "path", dataType = "String", name = "terminalId", value = "信息id", required = true) }
 	) 
 	@RequestMapping(value="/info/{terminalId}",method=RequestMethod.GET)
 	public Terminal findDevInfoById(@PathVariable(value = "terminalId") String terminalId) {
 		Terminal t = new Terminal();
-		t.setTerminalId(terminalId);
+		t.setId(terminalId);
 		Terminal res = terminalService.find(t);
 		return res;
 	}
@@ -88,7 +88,7 @@ public class TerminalController {
 		Terminal t = new Terminal();
 		t.setProjectNo(projectNo);
 		t.setTenantNo(tenantNo);
-		t.setTerminalId(terminalId);
+		t.setId(terminalId);
 		t.setTerminalName(terminalName);
 		List<Terminal> res = terminalService.findAll(t);
 		return res;

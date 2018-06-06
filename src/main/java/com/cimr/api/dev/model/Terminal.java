@@ -18,11 +18,7 @@ public class Terminal extends BaseEntity {
      */
 	@Id
     private String id;
-    /**
-     * 设备id
-     */
-	@DBFinder(added=true,opType=Oper.EQ)
-    private String terminalId;
+
     /**
      * 设备名称
      */
@@ -31,12 +27,10 @@ public class Terminal extends BaseEntity {
     /**
      * 项目编号
      */
-	@DBFinder(added=true,opType=Oper.EQ)
     private String projectNo;
     /**
      *租户编号
      */
-	@DBFinder(added=true,opType=Oper.EQ)
     private String tenantNo;
     /**
      *消息版本
@@ -91,20 +85,17 @@ public class Terminal extends BaseEntity {
      */
     private String remark;
 
+    /**
+     * 通信质量等级
+     */
+    private String qosValue;
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getTerminalId() {
-        return terminalId;
-    }
-
-    public void setTerminalId(String terminalId) {
-        this.terminalId = terminalId;
     }
 
     public String getTerminalName() {
@@ -233,5 +224,13 @@ public class Terminal extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getQosValue() {
+        return qosValue;
+    }
+
+    public void setQosValue(String qosValue) {
+        this.qosValue = qosValue;
     }
 }
