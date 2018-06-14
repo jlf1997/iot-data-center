@@ -77,7 +77,7 @@ public class MessageUtil {
 			data.put("cmdTitle", cmdTitle);
 		}
 		if(cmdContents!=null) {
-			data.put("cmdContent", cmdContents.getBytes("ISO-8859-1"));	
+			data.put("cmdContent", cmdContents);	
 		}
 			
 		if(telIds!=null) {

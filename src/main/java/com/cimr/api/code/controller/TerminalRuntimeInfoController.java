@@ -28,7 +28,7 @@ public class TerminalRuntimeInfoController {
 	private TerminalRuntimeInfoService terminalRuntimeInfoService;
 	
 	
-	@ApiOperation(value = "获取全部最新数据,统计其中boolean类型的数量",notes="countIncludeType与includeType默认为exclude "		
+	@ApiOperation(value = "获取终端runntimeinfo最新数据,统计其中boolean类型的数量",notes="countIncludeType与includeType默认为exclude "		
 			)	
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "includeType", value = "查询字段类型：排除或包含", required = false,allowableValues="INCLUDE,EXCLUDE"),

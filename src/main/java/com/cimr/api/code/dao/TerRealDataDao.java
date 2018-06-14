@@ -22,10 +22,9 @@ public class TerRealDataDao {
 	
 	
 	/**
-	 * redis 查询工具
+	 * redis 查询通用辅助工具类
 	 */
-
-	 private NormalRedisDao normalRedisDao;
+	private NormalRedisDao normalRedisDao;
     
 
 	
@@ -38,34 +37,34 @@ public class TerRealDataDao {
 	@Resource(name="fastJsonredisTemplate")
 	private RedisTemplate<String, Object> redisTemplate ;
 	
-	  @PostConstruct
-	    public void postConstruct() {
-		  normalRedisDao = new NormalRedisDao();
-			
-	    }
+    @PostConstruct
+    public void postConstruct() {
+	  normalRedisDao = new NormalRedisDao();
+    }
 	
-	
-
-
 
 	/**
-	 * 
+	 * 获取redis中实时数据 不建议使用 ，改为使用type 为string 的版本
 	 * @param termimals
 	 * @param signal
 	 * @param fields
 	 * @return
 	 */
+	@Deprecated
 	public List<Map<String,Object>> getData(List<TerimalModel> termimals, String signal,int type, String... fields) {
-//		 redisTemplate =
-//				 redisTemplateConfig.getFastJsonStringTemplate(redisProperties.getNewdataIndex(),Object.class);
 		 redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getNewdataIndex());
 		return normalRedisDao.getData(redisTemplate,RedisProperties.NEW_DATA+signal, termimals, type, fields);
 	}
 	
-	
+	/**
+	 * 获取redis中实时数据
+	 * @param termimals
+	 * @param signal
+	 * @param type
+	 * @param fields
+	 * @return
+	 */
 	public List<Map<String,Object>> getData(List<TerimalModel> termimals, String signal,String type, String... fields) {
-//		 redisTemplate =
-//				 redisTemplateConfig.getFastJsonStringTemplate(redisProperties.getNewdataIndex(),Object.class);
 		 redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getNewdataIndex());
 		return normalRedisDao.getData(redisTemplate,RedisProperties.NEW_DATA+signal, termimals, type, fields);
 	}
@@ -73,7 +72,7 @@ public class TerRealDataDao {
 
 	
 	/**
-	 * 
+	 * 获取redis中实时数据 统计其中boolean类型数量
 	 * @param termimals
 	 * @param signal
 	 * @param includeType
@@ -84,9 +83,6 @@ public class TerRealDataDao {
 	 */
 	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal, String includeType,
 			String[] fields, String countIncludeType, String[] countFields) {
-//		 redisTemplate =
-//				 redisTemplateConfig.getFastJsonStringTemplate(redisProperties.getNewdataIndex(),Object.class);
-//    	
 		 redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getNewdataIndex());
 		 return normalRedisDao.getDateBoolean(redisTemplate,RedisProperties.NEW_DATA+signal, termimals, includeType, fields, countIncludeType, countFields);
 	}

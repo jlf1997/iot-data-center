@@ -3,7 +3,6 @@ package com.cimr.api.code.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.model.Message;
+import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.service.RealTimeDateService;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.code.util.MessageUtil;
+import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.comm.model.TerimalModel;
 
 import io.swagger.annotations.Api;
@@ -49,6 +49,8 @@ public class SendCodeController {
 	
 	@Autowired
 	private CodeProperties codeProperties;
+	@Autowired
+	private CommandsService commandsService;
 	
 //	//应用向终端发送的topic
 //	private String TOPIC_APP_TO_TER = "SYS_MANAGE_CENTER";
@@ -57,28 +59,34 @@ public class SendCodeController {
 
 	@ApiOperation(value = "应用向终端发指令", notes = "cmdContents与telIds均以逗号隔开"			
 			)
-	@ApiImplicitParams({ 
-		@ApiImplicitParam(paramType = "query", dataType = "Long", name = "cmdType", value = "指令类型", required = true),
-		@ApiImplicitParam(paramType = "query", dataType = "Long", name = "cmdTitle", value = "指令标题", required = true),
-		@ApiImplicitParam(paramType = "query", dataType = "String", name = "cmdContents", value = "指令内容", required = false),
-		@ApiImplicitParam(paramType = "query", dataType = "String", name = "telIds", value = "终端编号id", required = false)
-	}) 
+//	@ApiImplicitParams({ 
+//		@ApiImplicitParam(paramType = "query", dataType = "Long", name = "cmdType", value = "指令类型", required = true),
+//		@ApiImplicitParam(paramType = "query", dataType = "Long", name = "cmdTitle", value = "指令标题", required = true),
+//		@ApiImplicitParam(paramType = "query", dataType = "String", name = "cmdId", value = "指令id", required = true),
+//		@ApiImplicitParam(paramType = "body", dataType = "String", name = "telIds", value = "终端编号id", required = true)
+//	}) 
 	@RequestMapping(value="/app/ter/code",method=RequestMethod.POST)
-	public String sendCode(@RequestParam("cmdType") int cmdType,
+	public HttpResult sendCode(@RequestParam("cmdType") int cmdType,
 			@RequestParam("cmdTitle") int cmdTitle,
-			@RequestParam("cmdContents") String cmdContents,
+			@RequestParam("cmdId") String cmdId,
 			@RequestBody List<TerimalModel> telIds) {
 		Message message = null;
+		HttpResult res ;
 		try {
+			String cmdContents = commandsService.getCommandsById(cmdId);
+			if(cmdContents==null) {
+				res = new HttpResult(false,"指令id错误或未获得许可");
+				return res;
+			}
 			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(telIds));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 			KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return "faile";
+			return new HttpResult(false,"出现异常，发送失败");
 		}
-		return "success";
+		return res = new HttpResult(true,"发送成功");
 	}
 	
 	

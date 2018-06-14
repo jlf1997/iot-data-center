@@ -83,7 +83,7 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- gson支持 -->
+		<!-- swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>	
@@ -110,7 +110,7 @@
 			<artifactId>guava</artifactId>	
 			<version>${guava.version}</version>		
 		</dependency>
-		
+		<!-- gson支持 -->
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>   

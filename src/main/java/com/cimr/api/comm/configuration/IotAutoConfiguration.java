@@ -8,6 +8,11 @@ import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.config.RedisProperties;
 import com.cimr.api.websocket.config.WebSocketProperties;
 
+/**
+ * 加载相关属性类
+ * @author Administrator
+ *
+ */
 @Configuration
 public class IotAutoConfiguration {
 

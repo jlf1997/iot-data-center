@@ -37,18 +37,28 @@ public class TerminalRuntimeInfoDao {
     }
     
     
-    public List<Map<String,Object>> getData(List<TerimalModel> termimals,int type, String... fields) {
-    	redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getRuntimeIndex());
-    	return normalRedisDao.getData(redisTemplate,RedisProperties.RUNNTIME, termimals, type, fields);
-	} 
-    
+    /**
+     * 查询终端的runntime redis信息
+     * @param termimals 终端列表
+     * @param type 查询类型
+     * @param fields 需要查询或排除的字段
+     * @return
+     */
     public List<Map<String,Object>> getData(List<TerimalModel> termimals,String type, String... fields) {
     	redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getRuntimeIndex());
     	return normalRedisDao.getData(redisTemplate,RedisProperties.RUNNTIME, termimals, type, fields);
 	} 
     
     
-    
+    /**
+     * 查询终端的runntime redis信息
+     * @param termimals 终端列表
+     * @param includeType 查询类型
+     * @param fields 需要查询或排除的字段
+     * @param countIncludeType 统计类型
+     * @param countFields 需要统计或者排除统计的字段
+     * @return
+     */
     public List<Map<String, Object>> getDateBoolean(List<TerimalModel> termimals,  String includeType,
 			String[] fields, String countIncludeType, String[] countFields) {
     	redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getRuntimeIndex());

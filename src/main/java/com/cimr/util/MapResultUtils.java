@@ -15,6 +15,13 @@ public class MapResultUtils {
 	private static final Logger log = LoggerFactory.getLogger(MapResultUtils.class);
 
 
+	/**
+	 * 处理得到的map结果集 只展示需要的字段
+	 * 该方法不会影响源结果集 
+	 * @param map 原始结果集
+	 * @param fields 需要展示的字段
+	 * @return 处理后新生成的结果集
+	 */
 	private static Map<String,Object> parseResultMapIncludeFields(Map<String,Object> map,String[] fields) {
 		Map<String,Object> res = new HashMap<>();
 		Iterator<String> iterator = map.keySet().iterator();
@@ -24,13 +31,13 @@ public class MapResultUtils {
 			if(fieldi==null) {
 				break;
 			}
-			int index = 0;
+//			int index = 0;
 			for(String field : fields) {
 				if(fieldi.equals(field)) {
 					res.put(fieldi, map.get(field));
 					break;
 				}
-				index++;
+//				index++;
 			}
 //			//字段数据库中不存在
 //			if(index==fields.length) {
@@ -40,6 +47,14 @@ public class MapResultUtils {
 		return res;
 	}
 	
+	
+	/**
+	 * 处理得到的map结果集 过滤掉不需要展示的字段
+	 * 该方法不会影响源结果集
+	 * @param map 原始结果集
+	 * @param fields 需要过滤的字段
+	 * @return 处理后新生成的结果集
+	 */
 	private static Map<String,Object> parseResultMapExcludeFields(Map<String,Object> map,String[] fields) {
 		Map<String,Object> res = new HashMap<>();
 		res.putAll(map);
@@ -63,12 +78,13 @@ public class MapResultUtils {
 	}
 	
 	/**
-	 * 
-	 * @param map
-	 * @param fields
-	 * @param type
-	 * @return
+	 * 过滤查询 方法不会影响源数据集
+	 * @param map 结果集
+	 * @param fields 需要添加或排除的字段
+	 * @param type 过滤类型 大于0表示排除的字段 小于0表示展示字段
+	 * @return 处理后的结果集
 	 */
+	@Deprecated
 	public static Map<String,Object> getList(Map<String,Object> map,String[] fields,int type){
 		Map<String,Object> res = null ;
 		if(fields!=null && fields.length>0) {
@@ -88,11 +104,11 @@ public class MapResultUtils {
 	}
 	
 	/**
-	 * 过滤查询字段
-	 * @param map
-	 * @param fields
-	 * @param typeStr
-	 * @return
+	 * 过滤查询 方法不会影响源数据集
+	 * @param map 结果集
+	 * @param fields 需要添加或排除的字段
+	 * @param typeStr 过滤类型 EXCLUDE表示排除的字段 INCLUDE表示展示字段
+	 * @return 处理后的结果集
 	 */
 	public static Map<String,Object> getList(Map<String,Object> map,String[] fields,String typeStr){
 		int type = 0;
@@ -186,7 +202,7 @@ public class MapResultUtils {
 		
 		Map<String,Object> out =null;
 		if(obj==null) {
-			log.info("查询数据为空");
+			log.debug("查询数据为空");
 			return out;
 		}
 		if(obj instanceof Map) {

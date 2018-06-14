@@ -1,6 +1,5 @@
 package com.cimr.api.code.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,9 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.dao.TerRealDataDao;
-import com.cimr.api.code.model.Terminal_1_Info;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.comm.model.TerimalModel;
 
@@ -42,10 +39,10 @@ public class RealTimeDateService {
 
 	
 	/**
-	 * 定时处理收到的消息
+	 * 定时处理收到的消息,定时发送消息到前端
 	 * @throws Exception
 	 */
-	  @Scheduled(fixedRate = 5000)
+	  @Scheduled(fixedRate = 500)
 	   private  void callback() throws Exception {
 		  handle.hanleMessage();
 	   }
@@ -67,38 +64,36 @@ public class RealTimeDateService {
 	  
 
 
-//
-//	 /**
-//	  * 根据终端id获取终端最新数据
-//	  * 数据来源:redis 第二组
-//	  * @param termimals
-//	  * @return
-//	  */
-//	
-//	public List<HashMap> getInfoByTerId(List<TerimalModel> termimals,String signal) {
-//		return terRealDataDao.getInfosByTerIds(termimals,signal);
-//	}
-//
-//
-//
-//
-//	/**
-//	 * 根据终端id获取终端最新位置数据
-//	 * @param termimals
-//	 * @return
-//	 */
-//	public List<Terminal_1_Info> getLocationInfoByTerId(List<TerimalModel> termimals,String signal) {
-//		return terRealDataDao.getLocationInfosByTerIds(termimals,signal);
-//	}
-	  
+	/**
+	 * 获取全部数据
+	 * @param termimals
+	 * @param signal
+	 * @return
+	 */
+	@Deprecated
 	public List<Map<String,Object>> getAllDate(List<TerimalModel> termimals,String signal){
 		return terRealDataDao.getData(termimals, signal, 0);
 	}
-	
+	/**
+	 * 获取数据 只包含给定字段
+	 * @param termimals
+	 * @param signal
+	 * @param fields
+	 * @return
+	 */
+	@Deprecated
 	public List<Map<String,Object>> getAllDateInclude(List<TerimalModel> termimals,String signal,String...fields){
 		return terRealDataDao.getData(termimals, signal, 1,fields);
 	} 
 	
+	/**
+	 * 获取数据 排除给定字段
+	 * @param termimals
+	 * @param signal
+	 * @param fields
+	 * @return
+	 */
+	@Deprecated
 	public List<Map<String,Object>> getAllDateExclude(List<TerimalModel> termimals,String signal,String...fields){
 		return terRealDataDao.getData(termimals, signal, -1,fields);
 	}
@@ -106,13 +101,13 @@ public class RealTimeDateService {
 
 
 	/**
-	 * 
-	 * @param termimals
-	 * @param signal
-	 * @param includeType
-	 * @param includeType2
-	 * @param countIncludeType
-	 * @param countFields
+	 * 获取实时数据 并统计其中的boolean类型
+	 * @param termimals 终端列表
+	 * @param signal 信号量
+	 * @param includeType 查询字段排除规则 include 或则exclude
+	 * @param fields 需要查询或排除的字段 
+	 * @param countIncludeType 统计字段排除规则
+	 * @param countFields 需要统计或者排除统计的字段
 	 * @return
 	 */
 	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal, String includeType,
@@ -122,13 +117,11 @@ public class RealTimeDateService {
 	} 
 	
 	/**
-	 * 
-	 * @param termimals
-	 * @param signal
-	 * @param includeType
-	 * @param includeType2
-	 * @param countIncludeType
-	 * @param countFields
+	 * 获取实时数据 支持指定需要查询的字段 或排除的字段
+	 * @param termimals 终端列表
+	 * @param signal 信号量
+	 * @param includeType 查询字段排除规则 include 或则exclude
+	 * @param fields  需要查询或排除的字段 
 	 * @return
 	 */
 	public List<Map<String, Object>> getData(List<TerimalModel> termimals, String signal, String includeType,

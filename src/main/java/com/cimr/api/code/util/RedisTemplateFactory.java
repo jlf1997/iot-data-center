@@ -20,6 +20,11 @@ public class RedisTemplateFactory {
 	@Autowired
 	private RedisTemplateConfig redisTemplateConfig;
 
+	
+	/**
+	 * 获取默认的fastjson序列化template
+	 * @return
+	 */
 	@Bean("fastJsonredisTemplate")
 	public RedisTemplate getRedisTemplateIndex0() {
 		 RedisTemplate<String, Object> redisTemplate ;
@@ -29,6 +34,12 @@ public class RedisTemplateFactory {
 	}
 	
 	
+	/**
+	 * 动态切换redis库
+	 * @param redisTemplate
+	 * @param index
+	 * @return
+	 */
 	public static RedisTemplate changeDataBase(RedisTemplate redisTemplate,int index) {
 		JedisConnectionFactory jedisConnectionFactory = (JedisConnectionFactory) redisTemplate.getConnectionFactory();
         jedisConnectionFactory.setDatabase(index);

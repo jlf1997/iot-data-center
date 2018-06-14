@@ -77,7 +77,7 @@ public abstract class AbstractMessageHandle implements MessageHandle{
 	}
 	
 	
-	@Scheduled(fixedRate = 1000)
+	@Scheduled(fixedRate = 500)
 	protected void scheduleGetData() {
 		List<String> telIds = null;
 		//判断是否需要重新订阅消息

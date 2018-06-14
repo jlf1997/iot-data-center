@@ -16,11 +16,10 @@ public class TerminalRuntimeInfoService {
 	private TerminalRuntimeInfoDao terminalRuntimeInfoDao;
 	
 	/**
-	 * 
+	 * 查询redis 中RuntimeInfo数据，统计其中的boolean 类型数据
 	 * @param termimals
-	 * @param signal
 	 * @param includeType
-	 * @param includeType2
+	 * @param fields
 	 * @param countIncludeType
 	 * @param countFields
 	 * @return
@@ -30,7 +29,13 @@ public class TerminalRuntimeInfoService {
 		return terminalRuntimeInfoDao.getDateBoolean(termimals, includeType, fields,countIncludeType,countFields);
 	}
 	
-	
+	/**
+	 * 查询redis中RuntimeInfo数据
+	 * @param termimals
+	 * @param includeType
+	 * @param fields
+	 * @return
+	 */
 	public List<Map<String, Object>> getData(List<TerimalModel> termimals, String includeType,
 			String[] fields) {
 		return terminalRuntimeInfoDao.getData(termimals, includeType, fields);
