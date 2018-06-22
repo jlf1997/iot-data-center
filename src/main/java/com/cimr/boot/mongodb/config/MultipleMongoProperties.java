@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 public class MultipleMongoProperties {
 	
 	private MongoProperties[] source;
+	
+	private String clusterNodes;
 
 	
 	
@@ -28,6 +30,20 @@ public class MultipleMongoProperties {
 		
 		return source[index];
 	}
+
+
+
+	public String getClusterNodes() {
+		return clusterNodes;
+	}
+
+
+
+	public void setClusterNodes(String clusterNodes) {
+		this.clusterNodes = clusterNodes;
+	}
+	
+	
 
 	
 	 
