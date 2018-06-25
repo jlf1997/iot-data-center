@@ -41,16 +41,17 @@ public class HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", allowMultiple = true,dataType = "string", name = "sortBy", value = "排序字段", required = false),
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "sortType", value = "排序字段", required = false,allowableValues="ASC,DESC")
 		}) 
-	@RequestMapping(value= "/app/{terid}/{singal}/all",method=RequestMethod.GET)
+	@RequestMapping(value= "/app/{terid}/{singal}/all/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersAllRealData(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
 			@RequestParam(name="beg",required=false) Long beg,
 			@RequestParam(name="end",required=false) Long end,
 			@RequestParam(name="sortBy",required=false) String[] sortBy,
-			@RequestParam(name="sortType",required=false) String sortType
+			@RequestParam(name="sortType",required=false) String sortType,
+			@PathVariable("projectId") String projectId
 			) {
-		List<Map<String,Object>> list = histroyService.findTersAllRealData(singal, terid,beg,end,sortBy,sortType);
+		List<Map<String,Object>> list = histroyService.findTersAllRealData(singal,projectId, terid,beg,end,sortBy,sortType);
 		return list;
 	}
 	
@@ -72,7 +73,7 @@ public class HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "sortType", value = "排序类型", required = false,allowableValues="ASC,DESC"),
 		@ApiImplicitParam(paramType = "query", allowMultiple = true,dataType = "string", name = "fields", value = "查询的字段", required = false)
 		}) 
-	@RequestMapping(value= "/app/{terid}/{singal}/include",method=RequestMethod.GET)
+	@RequestMapping(value= "/app/{terid}/{singal}/include/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersRealDataIncludeFields(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
@@ -80,9 +81,10 @@ public class HistoryRealDataController {
 			@RequestParam(name="end",required=false) Long end,
 			@RequestParam(name="sortBy",required=false) String[] sortBy,
 			@RequestParam(name="sortType",required=false) String sortType,
-			@RequestParam(name="fields",required=false) String[] fields
+			@RequestParam(name="fields",required=false) String[] fields,
+			@PathVariable("projectId") String projectId
 			) {
-		List<Map<String,Object>> list = histroyService.findTersAllRealDataInclude(singal, terid, beg, end, sortBy, sortType, fields);
+		List<Map<String,Object>> list = histroyService.findTersAllRealDataInclude(singal,projectId, terid, beg, end, sortBy, sortType, fields);
 		return list;
 	}
 	
@@ -104,7 +106,7 @@ public class HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "sortType", value = "排序类型", required = false,allowableValues="ASC,DESC"),
 		@ApiImplicitParam(paramType = "query", allowMultiple = true,dataType = "string", name = "fields", value = "排除的字段", required = false)
 	})  
-	@RequestMapping(value= "/app/{terid}/{singal}/exclude",method=RequestMethod.GET)
+	@RequestMapping(value= "/app/{terid}/{singal}/exclude/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersRealDataExcludeFields(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
@@ -112,9 +114,10 @@ public class HistoryRealDataController {
 			@RequestParam(name="end",required=false) Long end,
 			@RequestParam(name="sortBy",required=false) String[] sortBy,
 			@RequestParam(name="sortType",required=false) String sortType,
-			@RequestParam(name="fields",required=false) String[] fields
+			@RequestParam(name="fields",required=false) String[] fields,
+			@PathVariable("projectId") String projectId
 		){
-		List<Map<String,Object>> list = histroyService.findTersAllRealDataExculde(singal, terid, beg, end, sortBy, sortType, fields);
+		List<Map<String,Object>> list = histroyService.findTersAllRealDataExculde(singal,projectId, terid, beg, end, sortBy, sortType, fields);
 		return list;
 	}
 	
@@ -140,7 +143,7 @@ public class HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countIncludeType", value = "统计字段类型：排除或包含", required = false,allowableValues="INCLUDE,EXCLUDE"),
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countFields", value = "需要统计的字段或排除的字段", required = false,allowMultiple=true)
 		}) 
-	@RequestMapping(value= "/app/booleancount/{terid}/{singal}/all",method=RequestMethod.GET)
+	@RequestMapping(value= "/app/booleancount/{terid}/{singal}/all/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersAllRealDataBooleanCount(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
@@ -151,9 +154,10 @@ public class HistoryRealDataController {
 			@RequestParam(name="includeType",required=false) String includeType,
 			@RequestParam(name="fields",required=false) String[] fields,
 			@RequestParam(name="countIncludeType",required=false) String countIncludeType,
-			@RequestParam(name="countFields",required=false) String[] countFields
+			@RequestParam(name="countFields",required=false) String[] countFields,
+			@PathVariable("projectId") String projectId
 			) {
-		List<Map<String,Object>> list = histroyService.findTersAllRealDataBooleanCount(singal, terid,beg,end,sortBy,sortType,includeType,fields,countIncludeType,countFields);
+		List<Map<String,Object>> list = histroyService.findTersAllRealDataBooleanCount(singal,projectId, terid,beg,end,sortBy,sortType,includeType,fields,countIncludeType,countFields);
 		return list;
 	}
 	

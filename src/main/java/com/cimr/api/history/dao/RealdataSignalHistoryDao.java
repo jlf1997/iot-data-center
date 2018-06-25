@@ -25,9 +25,13 @@ public class RealdataSignalHistoryDao {
 	/**
 	 * 
 	 */
-	private final String COLLECTION_NAME = "REALDATA_SIGNAL_";
+	private final String COLLECTION_NAME = "REALDATA_SIGNAL";
 	
 	private final String COLLECTION_NAME_LOCATION = "LocationTest";
+	
+	private final String TERMINALNO = "terminalNo";
+	
+	private final String CREATETIME = "gatherMsgTime";
 	
 	@Autowired
 	@Qualifier(HistoryMongoConfig.MONGO_TEMPLATE)
@@ -39,14 +43,14 @@ public class RealdataSignalHistoryDao {
 	 * @param terid
 	 * @return
 	 */
-	public List<Map<String,Object>> findAllByTerId(String singal,String terid){
+	public List<Map<String,Object>> findAllByTerId(String singal,String projectId,String terid){
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(histroyTemp);
 		Query query = new Query();
 		if(terid!=null || "".equals(terid)) {
-			Criteria criteria = Criteria.where("_id").regex(terid+"*");
+			Criteria criteria = Criteria.where(TERMINALNO).regex(terid+"*");
 			query.addCriteria(criteria);
 		}
-		return finder.findAll(query,COLLECTION_NAME+singal);
+		return finder.findAll(query,getDbName(singal,projectId));
 	}
 	
 	/**
@@ -56,12 +60,12 @@ public class RealdataSignalHistoryDao {
 	 * @param beg
 	 * @return
 	 */
-	public List<Map<String,Object>> findAllByTime(String singal,Long beg,Long end){
+	public List<Map<String,Object>> findAllByTime(String singal,String projectId,Long beg,Long end){
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(histroyTemp);
 		Query query = new Query();
-		Criteria criteria = Criteria.where("gatherMsgTime").gte(beg).lte(end);
+		Criteria criteria = Criteria.where(CREATETIME).gte(beg).lte(end);
 		query.addCriteria(criteria);
-		return finder.findAll(query,COLLECTION_NAME+singal);
+		return finder.findAll(query,getDbName(singal,projectId));
 	} 
 	
 	
@@ -70,9 +74,9 @@ public class RealdataSignalHistoryDao {
 	 * @param singal
 	 * @return
 	 */
-	public List<Map<String,Object>> findAllBySingal(String singal){
+	public List<Map<String,Object>> findAllBySingal(String singal,String projectId){
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(histroyTemp);		
-		return finder.findAll(COLLECTION_NAME+singal);
+		return finder.findAll(getDbName(singal,projectId));
 	}
 	
 	
@@ -86,19 +90,19 @@ public class RealdataSignalHistoryDao {
 	public List<Map<String,Object>> findLocationByTerminalId(String terminalId,Long beg,Long end){
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(histroyTemp);	
 		Query query = new Query();
-		Criteria criteria = Criteria.where("gatherMsgTime").gte(beg).lte(end);
+		Criteria criteria = Criteria.where(CREATETIME).gte(beg).lte(end);
 		query.addCriteria(criteria);
 		//按照时间排序
-		query.with(new Sort(Sort.Direction.ASC, "gatherMsgTime"));
+		query.with(new Sort(Sort.Direction.ASC, CREATETIME));
 		return finder.findAll(query,COLLECTION_NAME_LOCATION);
 	}
 
-	public List<Map<String, Object>> findAllDataByTimeAndSingal(String singal, String terid, Long beg, Long end,String[] sortBy,String sortType,int type,String... fields) {
+	public List<Map<String, Object>> findAllDataByTimeAndSingal(String singal, String projectId,String terid, Long beg, Long end,String[] sortBy,String sortType,int type,String... fields) {
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(histroyTemp);	
 		Query query = new Query();
 		Criteria criteriaTime =null;
 		if(terid!=null || "".equals(terid)) {
-			Criteria criteria = Criteria.where("_id").regex(terid+"*");
+			Criteria criteria = Criteria.where(TERMINALNO).regex(terid+"*");
 			query.addCriteria(criteria);
 		}
 		
@@ -108,7 +112,7 @@ public class RealdataSignalHistoryDao {
 			beg = 0L;
 		}
 		
-		criteriaTime = Criteria.where("gatherMsgTime").gte(new Date(beg));
+		criteriaTime = Criteria.where(CREATETIME).gte(new Date(beg));
 		if(end!=null && end>0) {
 			criteriaTime.lte(new Date(end));
 		}	
@@ -127,7 +131,7 @@ public class RealdataSignalHistoryDao {
 			query.with(new Sort(direction, sortBy));
 		}
 		
-		List<Map<String, Object>> res = finder.findAll(query,COLLECTION_NAME+singal);
+		List<Map<String, Object>> res = finder.findAll(query,getDbName(singal,projectId));
 		List<Map<String, Object>> out = new ArrayList<>();
 		res.forEach(action->{
 			out.add(MapResultUtils.getList(action, fields, type));
@@ -140,7 +144,7 @@ public class RealdataSignalHistoryDao {
 
 	
 
-	public List<Map<String, Object>> findTersAllRealDataBooleanCount(String singal, String terid, Long beg, Long end,
+	public List<Map<String, Object>> findTersAllRealDataBooleanCount(String singal, String projectId,String terid, Long beg, Long end,
 			String[] sortBy, String sortType, String includeType, String[] fields, String countIncludeType,
 			String[] countFields) {
 		// TODO Auto-generated method stub
@@ -148,7 +152,7 @@ public class RealdataSignalHistoryDao {
 		Query query = new Query();
 		Criteria criteriaTime =null;
 		if(terid!=null || "".equals(terid)) {
-			Criteria criteria = Criteria.where("_id").regex(terid+"*");
+			Criteria criteria = Criteria.where(TERMINALNO).regex(terid+"*");
 			query.addCriteria(criteria);
 		}
 		
@@ -158,7 +162,7 @@ public class RealdataSignalHistoryDao {
 			beg = 0L;
 		}
 		
-		criteriaTime = Criteria.where("gatherMsgTime").gte(new Date(beg));
+		criteriaTime = Criteria.where(CREATETIME).gte(new Date(beg));
 		if(end!=null && end>0) {
 			criteriaTime.lte(new Date(end));
 		}	
@@ -177,7 +181,7 @@ public class RealdataSignalHistoryDao {
 			query.with(new Sort(direction, sortBy));
 		}
 		
-		List<Map<String, Object>> res = finder.findAll(query,COLLECTION_NAME+singal);
+		List<Map<String, Object>> res = finder.findAll(query,getDbName(singal,projectId));
 		List<Map<String, Object>> out = new ArrayList<>();
 		res.forEach(action->{
 			Map<String, Object>  map = MapResultUtils.getList(action, fields, includeType);
@@ -186,6 +190,10 @@ public class RealdataSignalHistoryDao {
 		});
 		
 		return out;
+	}
+	
+	private String getDbName(String singal,String projectId) {
+		return COLLECTION_NAME+"_"+projectId+"_"+singal;
 	}
 	
 	

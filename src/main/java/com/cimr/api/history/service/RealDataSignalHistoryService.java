@@ -18,25 +18,25 @@ public class RealDataSignalHistoryService {
 
 	
 
-	public List<Map<String, Object>> findTersAllRealData(String singal, String terid, Long beg, Long end,String[] sortBy,String sortType) {
-		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,terid, beg, end,sortBy,sortType,0);
+	public List<Map<String, Object>> findTersAllRealData(String singal,String projectId, String terid, Long beg, Long end,String[] sortBy,String sortType) {
+		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,projectId,terid, beg, end,sortBy,sortType,0);
 	} 
 	
-	public List<Map<String, Object>> findTersAllRealDataInclude(String singal, String terid, Long beg, Long end,String[] sortBy,String sortType,String...fields) {
-		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,terid, beg, end,sortBy,sortType,1,fields);
+	public List<Map<String, Object>> findTersAllRealDataInclude(String singal,String projectId, String terid, Long beg, Long end,String[] sortBy,String sortType,String...fields) {
+		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,projectId,terid, beg, end,sortBy,sortType,1,fields);
 	} 
 	
-	public List<Map<String, Object>> findTersAllRealDataExculde(String singal, String terid, Long beg, Long end,String[] sortBy,String sortType,String...fields) {
-		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,terid, beg, end,sortBy,sortType,-1,fields);
+	public List<Map<String, Object>> findTersAllRealDataExculde(String singal,String projectId, String terid, Long beg, Long end,String[] sortBy,String sortType,String...fields) {
+		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,projectId,terid, beg, end,sortBy,sortType,-1,fields);
 	}
 	
 	
 	
-	public List<Map<String, Object>> findTersAllRealDataBooleanCount(String singal, String terid, Long beg, Long end,
+	public List<Map<String, Object>> findTersAllRealDataBooleanCount(String singal,String projectId, String terid, Long beg, Long end,
 			String[] sortBy, String sortType, String includeType, String[] fields, String countIncludeType,
 			String[] countFields) {
 		// TODO Auto-generated method stub
-		return realdataSignalHistoryDao.findTersAllRealDataBooleanCount(singal, terid,beg,end,sortBy,sortType,includeType,fields,countIncludeType,countFields);
+		return realdataSignalHistoryDao.findTersAllRealDataBooleanCount(singal,projectId, terid,beg,end,sortBy,sortType,includeType,fields,countIncludeType,countFields);
 	} 
 		
 }
