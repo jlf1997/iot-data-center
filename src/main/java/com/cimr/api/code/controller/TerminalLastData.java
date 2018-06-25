@@ -30,26 +30,30 @@ public class TerminalLastData {
 	
 	@ApiOperation(value = "获取最新数据,只查询给定字段"			
 			)	
-	@RequestMapping(value="/app/{signal}/include",method=RequestMethod.POST)
+	@RequestMapping(value="/app/{signal}/include/{projectId}",method=RequestMethod.POST)
 	@Deprecated
 	public List<Map<String,Object>> getDateInclude(
 			@RequestParam("fields") String[] fields,
 			@PathVariable("signal") String signal,
-			@RequestBody List<TerimalModel> termimals) {
+			@RequestBody List<TerimalModel> termimals,
+			@PathVariable("projectId") String projectId
+			) {
 	
-		return realTimeDateService.getAllDateInclude(termimals,signal,fields);
+		return realTimeDateService.getAllDateInclude(termimals,signal,projectId,fields);
 	}
 	
 	@ApiOperation(value = "获取全部最新数据，排除给定字段"			
 			)	
-	@RequestMapping(value="/app/{signal}/exclude",method=RequestMethod.POST)
+	@RequestMapping(value="/app/{signal}/exclude/{projectId}",method=RequestMethod.POST)
 	@Deprecated
 	public List<Map<String,Object>> getDateExclude(
 			@RequestParam("fields") String[] fields,
 			@PathVariable("signal") String signal,
-			@RequestBody List<TerimalModel> termimals) {
+			@RequestBody List<TerimalModel> termimals,
+			@PathVariable("projectId") String projectId
+			) {
 	
-		return realTimeDateService.getAllDateExclude(termimals,signal,fields);
+		return realTimeDateService.getAllDateExclude(termimals,signal,projectId,fields);
 	}
 	
 	
@@ -57,13 +61,15 @@ public class TerminalLastData {
 	@ApiOperation(value = "获取全部最新数据"			
 			)	
 	
-	@RequestMapping(value="/app/{signal}/all",method=RequestMethod.POST)
+	@RequestMapping(value="/app/{signal}/all/{projectId}",method=RequestMethod.POST)
 	@Deprecated
 	public List<Map<String,Object>> getAllDate(
 			@PathVariable("signal") String signal,
-			@RequestBody List<TerimalModel> termimals) {
+			@RequestBody List<TerimalModel> termimals,
+			@PathVariable("projectId") String projectId
+			) {
 	
-		return realTimeDateService.getAllDate(termimals,signal);
+		return realTimeDateService.getAllDate(termimals,signal,projectId);
 	}
 	
 	@ApiOperation(value = "获取全部最新数据,统计其中boolean类型的数量",notes="countIncludeType与includeType默认为exclude "		
@@ -74,14 +80,15 @@ public class TerminalLastData {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countIncludeType", value = "统计字段类型：排除或包含", required = false,allowableValues="INCLUDE,EXCLUDE"),
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countFields", value = "需要统计的字段或排除的字段", required = false,allowMultiple=true)
 		}) 
-	@RequestMapping(value="/app/{signal}",method=RequestMethod.POST)
+	@RequestMapping(value="/app/{signal}/{projectId}",method=RequestMethod.POST)
 	public List<Map<String,Object>> getData(
 			@PathVariable("signal") String signal,
 			@RequestBody List<TerimalModel> termimals,
 			@RequestParam(name="includeType",required=false) String includeType,
-			@RequestParam(name="fields",required=false) String[] fields) {
+			@RequestParam(name="fields",required=false) String[] fields,
+			@PathVariable("projectId") String projectId) {
 	
-		return realTimeDateService.getData(termimals,signal,includeType,fields);
+		return realTimeDateService.getData(termimals,signal,projectId,includeType,fields);
 	}
 	
 	
@@ -93,15 +100,16 @@ public class TerminalLastData {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countIncludeType", value = "统计字段类型：排除或包含", required = false,allowableValues="INCLUDE,EXCLUDE"),
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countFields", value = "需要统计的字段或排除的字段", required = false,allowMultiple=true)
 		}) 
-	@RequestMapping(value="/app/booleancount/{signal}/all",method=RequestMethod.POST)
+	@RequestMapping(value="/app/booleancount/{signal}/all/{projectId}",method=RequestMethod.POST)
 	public List<Map<String,Object>> getAllDateBoolean(
 			@PathVariable("signal") String signal,
 			@RequestBody List<TerimalModel> termimals,
 			@RequestParam(name="includeType",required=false) String includeType,
 			@RequestParam(name="fields",required=false) String[] fields,
 			@RequestParam(name="countIncludeType",required=false) String countIncludeType,
-			@RequestParam(name="countFields",required=false) String[] countFields) {
+			@RequestParam(name="countFields",required=false) String[] countFields,
+			@PathVariable("projectId") String projectId) {
 	
-		return realTimeDateService.getDataBoolean(termimals,signal,includeType,fields,countIncludeType,countFields);
+		return realTimeDateService.getDataBoolean(termimals,signal,projectId,includeType,fields,countIncludeType,countFields);
 	}
 }

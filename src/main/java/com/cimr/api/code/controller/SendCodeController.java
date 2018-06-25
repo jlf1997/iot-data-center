@@ -133,7 +133,7 @@ public class SendCodeController {
 	@ApiOperation(value = "发送指令 获取实时数据"			
 			)	
 	@RequestMapping(value="/app/ter/realData",method=RequestMethod.POST)
-	public List<Map<String,Object>> sendCodeToGetRealData(
+	public String sendCodeToGetRealData(
 			@RequestParam("signal") String signal,
 			@RequestBody List<TerimalModel> termimals) {
 	    List<String> ids = new ArrayList<>();
@@ -141,7 +141,7 @@ public class SendCodeController {
 	    	ids.add(action.getTerId());
 	    });
 		handle.getRealData(ids);
-		return realTimeDateService.getAllDate(termimals,signal);
+		return "success";
 	}
 	
 	

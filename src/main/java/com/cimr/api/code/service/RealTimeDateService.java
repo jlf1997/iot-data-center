@@ -71,19 +71,20 @@ public class RealTimeDateService {
 	 * @return
 	 */
 	@Deprecated
-	public List<Map<String,Object>> getAllDate(List<TerimalModel> termimals,String signal){
-		return terRealDataDao.getData(termimals, signal, 0);
+	public List<Map<String,Object>> getAllDate(List<TerimalModel> termimals,String signal,String projectId){
+		return terRealDataDao.getData(termimals, signal,projectId, 0);
 	}
 	/**
 	 * 获取数据 只包含给定字段
 	 * @param termimals
 	 * @param signal
 	 * @param fields
+	 * @param projectId 
 	 * @return
 	 */
 	@Deprecated
-	public List<Map<String,Object>> getAllDateInclude(List<TerimalModel> termimals,String signal,String...fields){
-		return terRealDataDao.getData(termimals, signal, 1,fields);
+	public List<Map<String,Object>> getAllDateInclude(List<TerimalModel> termimals,String signal,String projectId,String...fields){
+		return terRealDataDao.getData(termimals, signal,projectId, 1,fields);
 	} 
 	
 	/**
@@ -94,8 +95,8 @@ public class RealTimeDateService {
 	 * @return
 	 */
 	@Deprecated
-	public List<Map<String,Object>> getAllDateExclude(List<TerimalModel> termimals,String signal,String...fields){
-		return terRealDataDao.getData(termimals, signal, -1,fields);
+	public List<Map<String,Object>> getAllDateExclude(List<TerimalModel> termimals,String signal,String projectId,String...fields){
+		return terRealDataDao.getData(termimals, signal,projectId, -1,fields);
 	}
 
 
@@ -110,10 +111,10 @@ public class RealTimeDateService {
 	 * @param countFields 需要统计或者排除统计的字段
 	 * @return
 	 */
-	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal, String includeType,
+	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal,String projectId, String includeType,
 			String[] fields, String countIncludeType, String[] countFields) {
 		// TODO Auto-generated method stub
-		return terRealDataDao.getDataBoolean(termimals, signal, includeType, fields,countIncludeType,countFields);
+		return terRealDataDao.getDataBoolean(termimals, signal,projectId, includeType, fields,countIncludeType,countFields);
 	} 
 	
 	/**
@@ -124,10 +125,10 @@ public class RealTimeDateService {
 	 * @param fields  需要查询或排除的字段 
 	 * @return
 	 */
-	public List<Map<String, Object>> getData(List<TerimalModel> termimals, String signal, String includeType,
+	public List<Map<String, Object>> getData(List<TerimalModel> termimals, String signal,String projectId, String includeType,
 			String[] fields) {
 		// TODO Auto-generated method stub
-		return terRealDataDao.getData(termimals, signal, includeType, fields);
+		return terRealDataDao.getData(termimals, signal,projectId, includeType, fields);
 	} 
 	  
     

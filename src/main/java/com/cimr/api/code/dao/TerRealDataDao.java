@@ -51,9 +51,10 @@ public class TerRealDataDao {
 	 * @return
 	 */
 	@Deprecated
-	public List<Map<String,Object>> getData(List<TerimalModel> termimals, String signal,int type, String... fields) {
+	public List<Map<String,Object>> getData(List<TerimalModel> termimals, String signal,String projectId,int type, String... fields) {
 		 redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getNewdataIndex());
-		return normalRedisDao.getData(redisTemplate,RedisProperties.NEW_DATA+signal, termimals, type, fields);
+		 String dbName = getDbName(projectId,signal);
+		 return normalRedisDao.getData(redisTemplate,RedisProperties.NEW_DATA+projectId+"_"+signal, termimals, type,fields);
 	}
 	
 	/**
@@ -64,9 +65,10 @@ public class TerRealDataDao {
 	 * @param fields
 	 * @return
 	 */
-	public List<Map<String,Object>> getData(List<TerimalModel> termimals, String signal,String type, String... fields) {
+	public List<Map<String,Object>> getData(List<TerimalModel> termimals, String signal,String projectId,String type, String... fields) {
 		 redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getNewdataIndex());
-		return normalRedisDao.getData(redisTemplate,RedisProperties.NEW_DATA+signal, termimals, type, fields);
+		 String dbName = getDbName(projectId,signal);
+		 return normalRedisDao.getData(redisTemplate,dbName, termimals, type, fields);
 	}
 
 
@@ -81,10 +83,22 @@ public class TerRealDataDao {
 	 * @param countFields
 	 * @return
 	 */
-	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal, String includeType,
+	public List<Map<String, Object>> getDataBoolean(List<TerimalModel> termimals, String signal, String projectId,String includeType,
 			String[] fields, String countIncludeType, String[] countFields) {
 		 redisTemplate = RedisTemplateFactory.changeDataBase(redisTemplate, redisProperties.getNewdataIndex());
-		 return normalRedisDao.getDateBoolean(redisTemplate,RedisProperties.NEW_DATA+signal, termimals, includeType, fields, countIncludeType, countFields);
+		 String dbName = getDbName(projectId,signal);
+		 return normalRedisDao.getDateBoolean(redisTemplate,dbName, termimals, includeType, fields, countIncludeType, countFields);
+	}
+	
+	
+	/**
+	 * 定义redis key
+	 * @param projectId
+	 * @param signal
+	 * @return
+	 */
+	private String getDbName(String projectId,String signal) {
+		return RedisProperties.NEW_DATA+projectId+"_"+signal;
 	}
 	
 	
