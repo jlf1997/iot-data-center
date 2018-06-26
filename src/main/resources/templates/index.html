@@ -3,7 +3,7 @@
 <head>
 <title>websocket demo</title>
 <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
-<script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdn.bootcss.com/sockjs-client/1.0.0/sockjs.min.js"></script>
 <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
 <script type="text/javascript">
     /*<![CDATA[*/
@@ -23,9 +23,11 @@
 
         //连接
         $scope.connect = function() {
-            var socket = new SockJS('/my-websocket');
+            var socket = new SockJS('http://175.6.4.141:8503/my-websocket');
+            //var socket = new SockJS('/my-websocket');
             stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
+            stompClient.connect({}, 
+            function(frame) {
                 // 注册发送消息
                 stompClient.subscribe('/topic/send', function(msg) {
                     $scope.data.rows.push(JSON.parse(msg.body));
@@ -41,7 +43,12 @@
 
                 $scope.data.connected = true;
                 $scope.$apply();
-            });
+            },
+            function errorCallBack (error) {
+                // 连接失败时（服务器响应 ERROR 帧）的回调方法                    
+                    console.log('连接失败【' + error + '】');
+             }
+           );
         };
 
         $scope.disconnect = function() {

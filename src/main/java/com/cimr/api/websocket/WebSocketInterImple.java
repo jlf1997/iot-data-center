@@ -1,6 +1,7 @@
 package com.cimr.api.websocket;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,10 +19,15 @@ public class WebSocketInterImple implements WebSocketChannelInter{
 
 	@Override
 	public void connect(StompHeaderAccessor sha) {
-		String terid = sha.getNativeHeader("terid").get(0);	
+		List<String> terids = sha.getNativeHeader("terid");
 		SessionObject so = new SessionObject();
-		so.setSa(sha);
-		so.setTerid(terid);
+		if(terids!=null) {
+			String terid = terids.get(0);	
+			so.setTerid(terid);
+		}else {
+			
+		}
+		so.setSa(sha);		
 		seesionMap.put(sha.getSessionId(),so);
 	}
 

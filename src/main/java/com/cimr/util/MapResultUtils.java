@@ -202,7 +202,7 @@ public class MapResultUtils {
 		
 		Map<String,Object> out =null;
 		if(obj==null) {
-			log.debug("查询数据为空");
+//			log.debug("查询数据为空");
 			return out;
 		}
 		if(obj instanceof Map) {

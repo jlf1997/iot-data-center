@@ -13,7 +13,11 @@ import com.cimr.boot.websocket.PresenceChannelInterceptor;
 import com.cimr.boot.websocket.WebSocketChannelInter;
 
 
-
+/**
+ * websocket配置
+ * @author Administrator
+ *
+ */
 
 
 @Configuration 

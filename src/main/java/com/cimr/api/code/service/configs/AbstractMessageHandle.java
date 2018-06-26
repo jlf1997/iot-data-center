@@ -19,6 +19,7 @@ import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.model.Message;
 import com.cimr.api.code.util.MessageUtil;
 import com.cimr.api.websocket.WebSocketInterImple;
+import com.cimr.api.websocket.config.WebSocketProperties;
 import com.cimr.api.websocket.model.SessionObject;
 
 public abstract class AbstractMessageHandle implements MessageHandle{
@@ -39,6 +40,9 @@ public abstract class AbstractMessageHandle implements MessageHandle{
 	
 	@Autowired
 	private CodeProperties codeProperties;
+	
+	@Autowired
+	private  WebSocketProperties webSocketProperties;
 	
 	
 	
@@ -73,7 +77,7 @@ public abstract class AbstractMessageHandle implements MessageHandle{
 	 *发送消息到websocket
 	 */
 	protected void sendMessage(Message obj) {
-		messagingTemplate.convertAndSendToUser(obj.getProducerId(),"/callback", obj.toJson());
+		messagingTemplate.convertAndSendToUser(obj.getProducerId(),webSocketProperties.getCallbackUrl(), obj.toJson());
 	}
 	
 	
