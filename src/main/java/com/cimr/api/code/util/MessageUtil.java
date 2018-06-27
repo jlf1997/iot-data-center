@@ -3,10 +3,13 @@ package com.cimr.api.code.util;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
@@ -109,5 +112,65 @@ public class MessageUtil {
 			list.add(terminal.getTerId());
 		});
 		return list;
+	}
+	
+	
+	/**
+	 * 通用传输命令
+	 * @param version
+	 * @param type
+	 * @param title
+	 * @param data
+	 * @param telIds
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static Message getSysMessage(Integer version,Integer type,Integer title,HttpServletRequest request,List<String> telIds) throws UnsupportedEncodingException {
+		Message message = new Message();
+		message.setProducerId("system");
+		message.setConsumerId("iot");
+		Random rm = new Random();
+		message.setMsgId(rm.nextInt(65534)+1);
+		message.setMsgTime(new Date());
+		if(version==null) {
+			version = 1;
+		}
+		message.setVersion(Byte.valueOf(version+""));
+		
+		if(type==null) {
+			type = 90;
+		}
+		message.setType(Byte.valueOf(version+""));
+		if(title==null) {
+			title = 3;
+		}	
+		message.setType(Byte.valueOf(title+""));
+		Map<String,Object> data = new HashMap<>();
+		if(request!=null) {
+			Enumeration<String> en = request.getParameterNames();
+			while(en.hasMoreElements()) {
+				String ele = en.nextElement();
+				if(!"title".equals(ele)
+					&& !"type".equals(ele)
+					&& !"version".equals(ele)) {
+					data.put(ele, request.getAttribute(ele));
+				}
+			
+			}
+		}
+		
+		if(telIds!=null) {
+		
+			telIds.stream().filter(predicate->{
+				if("".equals(predicate)) {
+					return false;
+				}
+				return true;
+			});
+			String telIdsJson = JSON.toJSONString(telIds);
+			data.put("telIds", telIdsJson);
+		}
+		message.setData(data);
+		return message;
 	}
 }

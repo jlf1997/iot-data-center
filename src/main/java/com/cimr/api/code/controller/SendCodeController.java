@@ -4,8 +4,8 @@ package com.cimr.api.code.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,10 @@ import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.comm.model.TerimalModel;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 
-@Api(description="指令据相关操作",tags= {"code"})
+@Api(description="指令据相关操作",tags= {"appCode"})
 @RestController
 @RequestMapping("/code")
 public class SendCodeController {
@@ -59,23 +57,22 @@ public class SendCodeController {
 
 	@ApiOperation(value = "应用向终端发指令", notes = "cmdContents与telIds均以逗号隔开"			
 			)
-//	@ApiImplicitParams({ 
-//		@ApiImplicitParam(paramType = "query", dataType = "Long", name = "cmdType", value = "指令类型", required = true),
-//		@ApiImplicitParam(paramType = "query", dataType = "Long", name = "cmdTitle", value = "指令标题", required = true),
-//		@ApiImplicitParam(paramType = "query", dataType = "String", name = "cmdId", value = "指令id", required = true),
-//		@ApiImplicitParam(paramType = "body", dataType = "String", name = "telIds", value = "终端编号id", required = true)
-//	}) 
 	@RequestMapping(value="/app/ter/code",method=RequestMethod.POST)
-	public HttpResult sendCode(@RequestParam("cmdType") int cmdType,
-			@RequestParam("cmdTitle") int cmdTitle,
+	public HttpResult sendCode(@RequestParam("cmdType") Integer cmdType,
+			@RequestParam("cmdTitle") Integer cmdTitle,
 			@RequestParam("cmdId") String cmdId,
 			@RequestBody List<TerimalModel> telIds) {
 		Message message = null;
 		HttpResult res ;
 		try {
 			String cmdContents = commandsService.getCommandsById(cmdId);
-			if(cmdContents==null) {
+			//判断指令是否错误
+			if(cmdContents==null ) {
 				res = new HttpResult(false,"指令id错误或未获得许可");
+				return res;
+			}
+			if(StringUtils.isBlank(cmdContents)) {
+				res = new HttpResult(false,"指令内容为空");
 				return res;
 			}
 			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(telIds));
@@ -148,14 +145,9 @@ public class SendCodeController {
 	
 	
 	
-//	/*
-//	 *测试接受数据
-//	 */
-//	 @Scheduled(fixedRate = 1000000)
-//	   private  void callback() throws Exception {
-//		 String str = "{\"consumerId\":\"iot\",\"data\":{\"cmdTitle\":2,\"cmdContent\":\"ISIkJg==\",\"cmdType\":30,\"telIds\":\"[\\\"TEL0000001\\\"]\"},\"msgId\":5481,\"msgTime\":1527130382348,\"producerId\":\"TEL0000001\",\"title\":1,\"type\":90,\"version\":1}";
-//		 log.debug("发送消息"+str);
-//		 KafkaTemplate.send("DATA_PUBLISH", str);
-//	   }
+	
+	
+	
+
 	
 }
