@@ -132,19 +132,13 @@ public class MessageUtil {
 		Random rm = new Random();
 		message.setMsgId(rm.nextInt(65534)+1);
 		message.setMsgTime(new Date());
-		if(version==null) {
-			version = 1;
-		}
+		
 		message.setVersion(Byte.valueOf(version+""));
 		
-		if(type==null) {
-			type = 90;
-		}
+		
 		message.setType(Byte.valueOf(version+""));
-		if(title==null) {
-			title = 3;
-		}	
-		message.setType(Byte.valueOf(title+""));
+		
+		message.setTitle(Byte.valueOf(title+""));
 		Map<String,Object> data = new HashMap<>();
 		if(request!=null) {
 			Enumeration<String> en = request.getParameterNames();
@@ -153,13 +147,13 @@ public class MessageUtil {
 				if(!"title".equals(ele)
 					&& !"type".equals(ele)
 					&& !"version".equals(ele)) {
-					data.put(ele, request.getAttribute(ele));
+					data.put(ele, request.getParameter(ele));
 				}
 			
 			}
 		}
 		
-		if(telIds!=null) {
+		if(telIds!=null && telIds.size()>0) {
 		
 			telIds.stream().filter(predicate->{
 				if("".equals(predicate)) {
