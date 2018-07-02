@@ -92,6 +92,9 @@ public class TerminalLastData {
 	}
 	
 	
+	
+
+	
 	@ApiOperation(value = "获取全部最新数据,统计其中boolean类型的数量",notes="countIncludeType与includeType默认为exclude "		
 			)	
 	@ApiImplicitParams({ 

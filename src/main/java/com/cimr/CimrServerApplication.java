@@ -1,7 +1,10 @@
 package com.cimr;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.cimr.boot.convert.EnableHttpConvert;
@@ -15,8 +18,13 @@ import com.cimr.boot.swagger.EnableSwagger2Doc;
 @EnableScheduling
 //@EnableFeignClients
 public class CimrServerApplication {
+	
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(CimrServerApplication.class, args);
+		
 	}
+	
+	
 }

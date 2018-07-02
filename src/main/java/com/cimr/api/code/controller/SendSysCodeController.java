@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,4 +98,15 @@ public class SendSysCodeController {
 		}
 		return "success";
 	}
+	
+	
+//	@KafkaListener(topics="topicTest")
+//	private void listener(String message) {
+//		System.out.println("getMessge:"+message);
+//	}
+//	@RequestMapping(value="/demo",method=RequestMethod.GET)
+//	public  String sendMessageDemo() {
+//		KafkaTemplate.send("topicTest","message test from clused");
+//		return "success";
+//	}
 }
