@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
 
@@ -80,6 +81,7 @@ public class MessageUtil {
 			data.put("cmdTitle", cmdTitle);
 		}
 		if(cmdContents!=null) {
+			cmdContents = parseCmd(cmdContents);
 			data.put("cmdContent", cmdContents);	
 		}
 			
@@ -136,7 +138,7 @@ public class MessageUtil {
 		message.setVersion(Byte.valueOf(version+""));
 		
 		
-		message.setType(Byte.valueOf(version+""));
+		message.setType(Byte.valueOf(type+""));
 		
 		message.setTitle(Byte.valueOf(title+""));
 		Map<String,Object> data = new HashMap<>();
@@ -167,4 +169,127 @@ public class MessageUtil {
 		message.setData(data);
 		return message;
 	}
+	
+	
+	/**
+	 * 解析指令格式，变为iso编码 byte数组
+	 * @param cmd
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String parseCmd(String cmd) throws UnsupportedEncodingException {
+		return parseCmd(cmd,"ISO8859-1");
+	}
+	
+	public static String parseCmd(String cmd,String charsetName) throws UnsupportedEncodingException {
+		cmd = cmdFomat(cmd);
+		byte[] bytes =getBytes(cmd);
+		return new String(bytes,charsetName);
+	}
+	
+	
+	/**
+	 * 解析指令内容为二进制
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+	public static String cmdFomat(String content) {
+		content = StringUtils.deleteWhitespace(content);
+		String[] str = content.split(",");
+		char[] out = new char[str.length*2];
+		char[] e;
+		for(int i=0;i<str.length;i++) {
+			 e = str[i].toCharArray();
+			 
+			 out[i*2] = (e[2]);
+			 out[i*2+1] = (e[3]);
+		}
+		return new String(out);
+	}
+	
+	public static boolean isOdd(String str) {
+		int length = str.length();
+		int isOdd = length % 2;
+		if (isOdd == 0)
+			return false;
+		else
+			return true;
+	}
+	
+//	public static byte[] parseCmdBytes(String cmd) {
+//		char[] chars = cmd.toCharArray();
+//		byte[] bytes = new byte[chars.length];
+//		for(int i=0;i<chars.length;i++) {
+//			bytes[i] = getByteFromChar(chars[i]);
+//		}
+//		return bytes;
+//	}
+	
+	public static byte[] getBytes(String str) {
+		boolean isOdd = isOdd(str);
+		int size = str.length();
+		if (isOdd) {
+			byte[] byteOdd = new byte[size / 2 + 1];
+			for (int j = 0, i = 0; i < str.length() - 1; i++) {
+				if (i % 2 == 0) {
+					byte a = getByteFromChar(str.charAt(i));
+					byte b = getByteFromChar(str.charAt(++i));
+					byteOdd[j++] = (byte) (a * 16 + b);
+				}
+ 
+			}
+			byteOdd[size / 2] = (byte) str.charAt(str.length() - 1);
+			return byteOdd;
+		} else {
+			byte[] byteEven = new byte[size / 2];
+			for (int j = 0, i = 0; i < str.length(); i++) {
+				if (i % 2 == 0) {
+					byte a = getByteFromChar(str.charAt(i));
+					byte b = getByteFromChar(str.charAt(++i));
+					byteEven[j++] = (byte) (a * 16 + b);
+				}
+ 
+			}
+			return byteEven;
+		}
+ 
+	}
+ 
+	public static byte getByteFromChar(char c) {
+		if (c == '0') {
+			return 0;
+		} else if (c == '1') {
+			return 1;
+		} else if (c == '2') {
+			return 2;
+		} else if (c == '3') {
+			return 3;
+		} else if (c == '4') {
+			return 4;
+		} else if (c == '5') {
+			return 5;
+		} else if (c == '6') {
+			return 6;
+		} else if (c == '7') {
+			return 7;
+		} else if (c == '8') {
+			return 8;
+		} else if (c == '9') {
+			return 9;
+		} else if (c == 'a'||c=='A') {
+			return 10;
+		} else if (c == 'b'||c=='B') {
+			return 11;
+		} else if (c == 'c'||c=='C') {
+			return 12;
+		} else if (c == 'd'||c=='D') {
+			return 13;
+		} else if (c == 'e'||c=='E') {
+			return 14;
+		} else if (c == 'f'||c=='F') {
+			return 15;
+		}
+		return -1;
+	}
+ 
 }

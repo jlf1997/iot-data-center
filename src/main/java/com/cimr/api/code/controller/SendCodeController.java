@@ -4,6 +4,9 @@ package com.cimr.api.code.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -55,7 +58,7 @@ public class SendCodeController {
 	
 	
 
-	@ApiOperation(value = "应用向终端发指令", notes = "cmdContents与telIds均以逗号隔开"			
+	@ApiOperation(value = "应用向终端发指令", notes = ""			
 			)
 	@RequestMapping(value="/app/ter/code",method=RequestMethod.POST)
 	public HttpResult sendCode(@RequestParam("cmdType") Integer cmdType,
@@ -78,12 +81,20 @@ public class SendCodeController {
 			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(telIds));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson);
+			try {
+				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException | ExecutionException | TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new HttpResult(false,"kafka连接失败，发送失败");
+			}
+			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return new HttpResult(false,"出现异常，发送失败");
 		}
-		return res = new HttpResult(true,"发送成功");
+		 res = new HttpResult(true,"发送成功");
+		 return res;
 	}
 	
 	
@@ -98,7 +109,14 @@ public class SendCodeController {
 			message = MessageUtil.getMessage(90,2,null, null, null, MessageUtil.convertTerminalModelListToStringList(telIds));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson);
+			
+			try {
+				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException | ExecutionException | TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "faile";
+			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return "faile";
@@ -117,7 +135,15 @@ public class SendCodeController {
 			message = MessageUtil.getMessage(90,3,null, null, null, MessageUtil.convertTerminalModelListToStringList(telIds));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson);
+
+			try {
+				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException | ExecutionException | TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "faile";
+			}
+			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return "faile";

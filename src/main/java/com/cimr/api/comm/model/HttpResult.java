@@ -7,16 +7,16 @@ public class HttpResult {
 
 	private Object data;
 
-	private String error;
+	private String message;
 
 	public HttpResult(boolean success, Object data) {
 		this.success = success;
 		this.data = data;
 	}
 
-	public HttpResult(boolean success, String error) {
+	public HttpResult(boolean success, String message) {
 		this.success = success;
-		this.error = error;
+		this.message = message;
 	}
 
 	public Object getData() {
@@ -27,12 +27,14 @@ public class HttpResult {
 		this.data = data;
 	}
 
-	public String getError() {
-		return this.error;
+	
+
+	public String getMessage() {
+		return message;
 	}
 
-	public void setError(String error) {
-		this.error = error;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public boolean isSuccess() {

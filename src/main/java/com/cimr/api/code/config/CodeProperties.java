@@ -21,7 +21,18 @@ public class CodeProperties {
 	private String topicReciveRealData = "DATA_PUBLISH";
 	
 	
+	private String appLicenseCode = "0";
 	
+	
+	
+
+	public String getAppLicenseCode() {
+		return appLicenseCode;
+	}
+
+	public void setAppLicenseCode(String appLicenseCode) {
+		this.appLicenseCode = appLicenseCode;
+	}
 
 	public Long getSubscribeTimeMill() {
 		return subscribeTimeMill;

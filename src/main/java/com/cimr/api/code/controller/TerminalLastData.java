@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,10 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/latest_data")
 public class TerminalLastData {
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(TerminalLastData.class);
+
 
 	@Autowired
 	private RealTimeDateService realTimeDateService;
@@ -87,8 +93,14 @@ public class TerminalLastData {
 			@RequestParam(name="includeType",required=false) String includeType,
 			@RequestParam(name="fields",required=false) String[] fields,
 			@PathVariable("projectId") String projectId) {
-	
-		return realTimeDateService.getData(termimals,signal,projectId,includeType,fields);
+		List<Map<String,Object>> list = null;
+		try {
+			 list =  realTimeDateService.getData(termimals,signal,projectId,includeType,fields);
+		}catch (Exception e) {
+			// TODO: handle exception
+			log.error("查询出错："+e.getMessage());
+		}
+		return list;
 	}
 	
 	
@@ -112,7 +124,14 @@ public class TerminalLastData {
 			@RequestParam(name="countIncludeType",required=false) String countIncludeType,
 			@RequestParam(name="countFields",required=false) String[] countFields,
 			@PathVariable("projectId") String projectId) {
-	
-		return realTimeDateService.getDataBoolean(termimals,signal,projectId,includeType,fields,countIncludeType,countFields);
+		List<Map<String,Object>> list = null;
+		try {
+			 list =  realTimeDateService.getDataBoolean(termimals,signal,projectId,includeType,fields,countIncludeType,countFields);
+		}catch (Exception e) {
+			// TODO: handle exception
+			log.error("查询出错："+e.getMessage());
+		}
+		
+		return list;	
 	}
 }

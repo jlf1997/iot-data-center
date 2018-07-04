@@ -32,6 +32,7 @@ public class IotAutoConfiguration {
 	@Bean
     @ConditionalOnMissingBean
 	public RedisProperties redisProperties() {
+//		RedisProperties c = new RedisProperties();
 		return new RedisProperties();
 	}
 }
