@@ -26,14 +26,26 @@ public class CimrServerApplication {
 
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		SpringApplication.run(CimrServerApplication.class, args);
-////		String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
-//		String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
-//		cmd = MessageUtil.parseCmdContent(cmd);
-//		
-////		byte[] bb = MessageUtil.parseCmdBytes(cmd);
-//		byte[] bc = MessageUtil.getBytes(cmd);
-//		String tt = new String(bc,"ISO8859-1");
-//		System.out.println(tt);
+//		test();
+
+	}
+	
+	private static void test() {
+		String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0xp1, 0xP1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
+		char[] cc = {'2','1','5'};
+		String cou = MessageUtil.parseCommerCode(cmd,6,7,cc);
+		System.out.println(cou);
+	}
+	
+	private void ff() {
+////	String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
+//	String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
+//	cmd = MessageUtil.parseCmdContent(cmd);
+//	
+////	byte[] bb = MessageUtil.parseCmdBytes(cmd);
+//	byte[] bc = MessageUtil.getBytes(cmd);
+//	String tt = new String(bc,"ISO8859-1");
+//	System.out.println(tt);
 	}
 	
 	

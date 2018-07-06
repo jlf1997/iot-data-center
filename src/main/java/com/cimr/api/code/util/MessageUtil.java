@@ -20,6 +20,8 @@ import com.alibaba.fastjson.parser.Feature;
 import com.cimr.api.code.model.Message;
 import com.cimr.api.comm.model.TerimalModel;
 
+import io.jsonwebtoken.lang.Arrays;
+
 
 
 @Configuration
@@ -181,6 +183,12 @@ public class MessageUtil {
 		return parseCmd(cmd,"ISO8859-1");
 	}
 	
+	/**
+	 * 解析指令格式，变为指定编码的 byte数组
+	 * @param cmd
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
 	public static String parseCmd(String cmd,String charsetName) throws UnsupportedEncodingException {
 		cmd = cmdFomat(cmd);
 		byte[] bytes =getBytes(cmd);
@@ -207,6 +215,11 @@ public class MessageUtil {
 		return new String(out);
 	}
 	
+	/**
+	 * 字符串长度是否是奇数
+	 * @param str
+	 * @return
+	 */
 	public static boolean isOdd(String str) {
 		int length = str.length();
 		int isOdd = length % 2;
@@ -216,15 +229,11 @@ public class MessageUtil {
 			return true;
 	}
 	
-//	public static byte[] parseCmdBytes(String cmd) {
-//		char[] chars = cmd.toCharArray();
-//		byte[] bytes = new byte[chars.length];
-//		for(int i=0;i<chars.length;i++) {
-//			bytes[i] = getByteFromChar(chars[i]);
-//		}
-//		return bytes;
-//	}
-	
+	/**
+	 * 字符串转字节数组
+	 * @param str
+	 * @return
+	 */
 	public static byte[] getBytes(String str) {
 		boolean isOdd = isOdd(str);
 		int size = str.length();
@@ -255,6 +264,11 @@ public class MessageUtil {
  
 	}
  
+	/**
+	 * char转字节
+	 * @param c
+	 * @return
+	 */
 	public static byte getByteFromChar(char c) {
 		if (c == '0') {
 			return 0;
@@ -290,6 +304,96 @@ public class MessageUtil {
 			return 15;
 		}
 		return -1;
+	}
+	
+	
+	/**
+	 * 对指令进行替换
+	 * @param code 原始指令
+	 * @param begin 开始
+	 * @param end 结束
+	 * @param value 替换的值
+	 * @return
+	 */
+	public static String parseCommerCode(String codes,int begin,int end ,char[] chars) {
+		String[] code = codes.split(",");
+		List<String> newValue = getStringFromCharBy2(chars);
+		
+		for(int i=0;i<end-begin+1;i++) {
+			if(i<newValue.size()) {
+				code[end-i-1] = "0x"+newValue.get(i);
+			}
+			
+		}
+		return StringUtils.join(code, ",");
+	}
+	
+	
+//	/**
+//	 * 通配符替换指令中的值，其中P1...PN,表示有n组需要替换的值
+//	 * @param codes
+//	 * @param charsList
+//	 * @return
+//	 */
+//	public static String parseCommerCode(String codes ,List<char[]> charsList) {
+//		String[] code = codes.split(",");
+//		List<String> newValue = getStringFromCharBy2(chars);
+//		
+//		for(int i=0;i<end-begin+1;i++) {
+//			if(i<newValue.size()) {
+//				code[end-i-1] = "0x"+newValue.get(i);
+//			}
+//			
+//		}
+//		return StringUtils.join(code, ",");
+//	}
+	
+
+	
+	/**
+	 * 获取指令占位符位置
+	 * @param cmd
+	 * @return
+	 */
+	private static int[] getPlaceholder(String[] code) {
+		
+		return null;
+	}
+	
+	
+	/**
+	 * 获取2进制char
+	 * @param chars
+	 * @return
+	 */
+	private static List<String> getStringFromCharBy2(char[] chars) {
+		List<String> strs = new ArrayList<>();
+		char[] ctwo = new char[2];
+		String s ;
+		//偶数
+		if(chars.length%2==0) {
+			//java 与c 编码方式不同 ，需要转换
+			for(int i=0;i<chars.length;i=i+2) {
+				ctwo[0] = chars[i];
+				ctwo[1] = chars[i+1];
+				s = String.valueOf(ctwo);
+				strs.add(s);
+			}
+		}else {
+			ctwo[0] = '0';
+			ctwo[1] = chars[0];
+			s = String.valueOf(ctwo);
+			strs.add(s);
+			for(int i=1;i<chars.length;i=i+2) {
+				ctwo[0] = chars[i];
+				ctwo[1] = chars[i+1];
+				s = String.valueOf(ctwo);
+				strs.add(s);
+			}
+		}
+		
+		return  strs;
+	
 	}
  
 }

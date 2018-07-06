@@ -172,6 +172,54 @@ public class SendCodeController {
 	
 	
 	
+	@ApiOperation(value = "应用向终端发延时锁机指令", notes = ""			
+			)
+	@RequestMapping(value="/app/ter/code/delayLock",method=RequestMethod.POST)
+	public HttpResult sendCode(@RequestParam("cmdType") Integer cmdType,
+			@RequestParam("cmdTitle") Integer cmdTitle,
+			@RequestParam("cmdId") String cmdId,
+			@RequestParam("delay") Integer delay,
+			@RequestBody List<TerimalModel> telIds) {		
+		Message message = null;
+		HttpResult res ;
+		try {
+			String cmdContents = commandsService.getCommandsById(cmdId);
+			//判断指令是否错误
+			if(cmdContents==null ) {
+				res = new HttpResult(false,"指令id错误或未获得许可");
+				return res;
+			}
+			if(StringUtils.isBlank(cmdContents)) {
+				res = new HttpResult(false,"指令内容为空");
+				return res;
+			}
+			String hex = Integer.toHexString(delay);
+			char[] chars =hex.toCharArray();
+			/**
+			 * 直接将时间放入指令的 6到 7 字节
+			 */
+			cmdContents = MessageUtil.parseCommerCode(cmdContents,6,7,chars);
+			
+			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(telIds));
+			String messageJson=message.toJson();
+			log.debug("message:"+messageJson);
+			try {
+				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException | ExecutionException | TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new HttpResult(false,"kafka连接失败，发送失败");
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new HttpResult(false,"出现异常，发送失败");
+		}
+		 res = new HttpResult(true,"发送成功");
+		 return res;
+	}
+	
+	
 	
 	
 
