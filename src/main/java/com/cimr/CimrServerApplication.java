@@ -31,9 +31,11 @@ public class CimrServerApplication {
 	}
 	
 	private static void test() {
-		String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0xp1, 0xP1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
-		char[] cc = {'2','1','5'};
-		String cou = MessageUtil.parseCommerCode(cmd,6,7,cc);
+		String cmd = "0x01, 0x1C, 0x1F, 0x17, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01";
+//		String hex = Integer.toHexString(30);
+//		char[] chars =hex.toCharArray();
+		char[] chars = {'4','3','1','e'};
+		String cou = MessageUtil.parseCommerCode(cmd,6,7,chars);
 		System.out.println(cou);
 	}
 	
