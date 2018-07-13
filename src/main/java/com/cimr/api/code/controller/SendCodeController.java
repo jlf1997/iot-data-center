@@ -4,9 +4,6 @@ package com.cimr.api.code.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.model.Message;
+import com.cimr.api.code.po.CodeSenderObject;
 import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.service.RealTimeDateService;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.code.util.MessageUtil;
 import com.cimr.api.comm.model.HttpResult;
-import com.cimr.api.comm.model.TerimalModel;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,17 +36,12 @@ public class SendCodeController {
 	
 	private static final Logger log = LoggerFactory.getLogger(SendCodeController.class);
 
-	@Autowired
-	private KafkaTemplate<String,Object> KafkaTemplate;
+
 	
 	@Autowired
 	private MessageHandle handle;
 	
-	@Autowired
-	private RealTimeDateService realTimeDateService;
-	
-	@Autowired
-	private CodeProperties codeProperties;
+
 	@Autowired
 	private CommandsService commandsService;
 	
@@ -61,10 +53,11 @@ public class SendCodeController {
 	@ApiOperation(value = "应用向终端发指令", notes = ""			
 			)
 	@RequestMapping(value="/app/ter/code",method=RequestMethod.POST)
-	public HttpResult sendCode(@RequestParam("cmdType") Integer cmdType,
-			@RequestParam("cmdTitle") Integer cmdTitle,
+	public HttpResult sendCode(
 			@RequestParam("cmdId") String cmdId,
-			@RequestBody List<TerimalModel> telIds) {
+			@RequestParam("cmdTitle") Integer cmdTitle,
+			@RequestParam("cmdType") Integer cmdType,
+			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		HttpResult res ;
 		try {
@@ -78,17 +71,15 @@ public class SendCodeController {
 				res = new HttpResult(false,"指令内容为空");
 				return res;
 			}
-			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(telIds));
+			if(codeSenderObject==null 
+					||codeSenderObject.getTelIds()==null
+					||codeSenderObject.getTelIds().size()==0) {
+				return new HttpResult(false,"参数错误，发送失败");
+			}
+			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			try {
-				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException | ExecutionException | TimeoutException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new HttpResult(false,"kafka连接失败，发送失败");
-			}
-			
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return new HttpResult(false,"出现异常，发送失败");
@@ -102,53 +93,51 @@ public class SendCodeController {
 	@ApiOperation(value = "应用设置终端调试", notes = "cmdContents与telIds均以逗号隔开"			
 			)	
 	@RequestMapping(value="/app/ter/debug",method=RequestMethod.POST)
-	public String sendDebug(
-			@RequestBody List<TerimalModel> telIds) {
+	public HttpResult sendDebug(
+			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		try {
-			message = MessageUtil.getMessage(90,2,null, null, null, MessageUtil.convertTerminalModelListToStringList(telIds));
+			if(codeSenderObject==null 
+					||codeSenderObject.getTelIds()==null
+					||codeSenderObject.getTelIds().size()==0) {
+				return new HttpResult(false,"参数错误，发送失败");
+			}
+			message = MessageUtil.getMessage(90,2,null, null, null, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			
-			try {
-				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException | ExecutionException | TimeoutException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return "faile";
-			}
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return "faile";
+			return new HttpResult(false,"发送失败");
 		}
-		return "success";
+		return new HttpResult(true,"发送成功");
 	}
 	
 	
 	@ApiOperation(value = "应用设置终端解除调试", notes = ""			
 			)	
 	@RequestMapping(value="/app/ter/endDebug",method=RequestMethod.POST)
-	public String sendEndDebug(
-			@RequestBody List<TerimalModel> telIds) {
+	public HttpResult sendEndDebug(
+			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		try {
-			message = MessageUtil.getMessage(90,3,null, null, null, MessageUtil.convertTerminalModelListToStringList(telIds));
+			if(codeSenderObject==null 
+					||codeSenderObject.getTelIds()==null
+					||codeSenderObject.getTelIds().size()==0) {
+				return new HttpResult(false,"参数错误，发送失败");
+			}
+			message = MessageUtil.getMessage(90,3,null, null, null
+					, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 
-			try {
-				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException | ExecutionException | TimeoutException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return "faile";
-			}
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return "faile";
+			return new HttpResult(false,"发送失败");
 		}
-		return "success";
+		return new HttpResult(true,"发送成功");
 	}
 	
 	
@@ -156,15 +145,15 @@ public class SendCodeController {
 	@ApiOperation(value = "发送指令 获取实时数据"			
 			)	
 	@RequestMapping(value="/app/ter/realData",method=RequestMethod.POST)
-	public String sendCodeToGetRealData(
+	public HttpResult sendCodeToGetRealData(
 			@RequestParam("signal") String signal,
-			@RequestBody List<TerimalModel> termimals) {
+			@RequestBody CodeSenderObject codeSenderObject) {
 	    List<String> ids = new ArrayList<>();
-	    termimals.forEach(action->{
+	    codeSenderObject.getTelIds().forEach(action->{
 	    	ids.add(action.getTerId());
 	    });
 		handle.getRealData(ids);
-		return "success";
+		return new HttpResult(true,"发送成功");
 	}
 	
 	
@@ -175,14 +164,20 @@ public class SendCodeController {
 	@ApiOperation(value = "应用向终端发延时锁机指令", notes = ""			
 			)
 	@RequestMapping(value="/app/ter/code/delayLock",method=RequestMethod.POST)
-	public HttpResult sendCode(@RequestParam("cmdType") Integer cmdType,
-			@RequestParam("cmdTitle") Integer cmdTitle,
+	public HttpResult sendCode(
 			@RequestParam("cmdId") String cmdId,
+			@RequestParam("cmdTitle") Integer cmdTitle,
+			@RequestParam("cmdType") Integer cmdType,
 			@RequestParam("delay") Integer delay,
-			@RequestBody List<TerimalModel> telIds) {		
+			@RequestBody CodeSenderObject codeSenderObject) {		
 		Message message = null;
 		HttpResult res ;
 		try {
+			if(codeSenderObject==null 
+					||codeSenderObject.getTelIds()==null
+					||codeSenderObject.getTelIds().size()==0) {
+				return new HttpResult(false,"参数错误，发送失败");
+			}
 			String cmdContents = commandsService.getCommandsById(cmdId);
 			//判断指令是否错误
 			if(cmdContents==null ) {
@@ -200,16 +195,11 @@ public class SendCodeController {
 			 */
 			cmdContents = MessageUtil.parseCommerCode(cmdContents,6,7,chars);
 			
-			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(telIds));
+			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle
+					, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			try {
-				KafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson).get(60000, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException | ExecutionException | TimeoutException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new HttpResult(false,"kafka连接失败，发送失败");
-			}
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
