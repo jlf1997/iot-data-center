@@ -14,8 +14,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.comm.model.TerimalModel;
-import com.cimr.api.dev.jpa.TerminalJpa;
-import com.cimr.api.dev.model.Terminal;
+import com.cimr.api.dev.jpa.mgr.TerminalJpa;
+import com.cimr.api.dev.model.mgr.Terminal;
 import com.cimr.boot.jpafinder.DefindSelect;
 import com.cimr.boot.jpafinder.Finder;
 import com.cimr.boot.jpafinder.SpringDateJpaOper;

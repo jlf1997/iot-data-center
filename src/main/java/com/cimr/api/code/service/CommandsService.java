@@ -1,7 +1,5 @@
 package com.cimr.api.code.service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import javax.annotation.Resource;
@@ -27,8 +25,9 @@ import org.springframework.web.client.RestTemplate;
 import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.dao.CommandsDao;
 import com.cimr.api.code.dao.DictDao;
-import com.cimr.api.code.model.Commands;
+import com.cimr.api.code.model.mgr.Commands;
 import com.cimr.api.code.po.CodeResultNotiyObject;
+import com.cimr.api.code.po.CodeSenderObject;
 
 @Service
 public class CommandsService {
@@ -78,7 +77,7 @@ public class CommandsService {
 	 * 通过kafka向中终端发送指令,并在发送结束后，反馈结果
 	 * @param message
 	 */
-	public void sendCodeToTerminalByKafka(String message,String url) {
+	public void sendCodeToTerminalByKafka(String message,CodeSenderObject codeSenderObject) {
 		executorService.execute(new Runnable() {
 
 			@Override
@@ -91,18 +90,20 @@ public class CommandsService {
 //		                log.info("send success {}", result.getProducerRecord().value());
 		                
 		                CodeResultNotiyObject codeResult = new CodeResultNotiyObject();
+		                codeResult.setCodeId(codeSenderObject.getCodeId());
 		                codeResult.setReturn_code("SUCCESS");
 		                codeResult.setReturn_message("发送成功");
-		                notiyCodeResutl(url,codeResult);
+		                notiyCodeResutl(codeSenderObject.getNotify_url(),codeResult);
 		            }
 
 		            @Override
 		            public void onFailure(Throwable ex) {
 		                log.warn("send fail {}", ex.getMessage());
 		                CodeResultNotiyObject codeResult = new CodeResultNotiyObject();
+		                codeResult.setCodeId(codeSenderObject.getCodeId());
 		                codeResult.setReturn_code("FAILD");
 		                codeResult.setReturn_message("发送失败");
-		                notiyCodeResutl(url,codeResult);
+		                notiyCodeResutl(codeSenderObject.getNotify_url(),codeResult);
 		            }
 
 		        });
@@ -125,6 +126,7 @@ public class CommandsService {
 		MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
         params.add("return_code", result.getReturn_code());
         params.add("return_message", result.getReturn_message());
+        params.add("codeId", result.getCodeId());
         HttpEntity entity = new HttpEntity( params,headers);
         ResponseEntity<String> rss =null;
         try {

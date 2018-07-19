@@ -17,7 +17,7 @@ import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
-import com.cimr.api.code.model.Message;
+import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.comm.model.TerimalModel;
 
 import io.jsonwebtoken.lang.Arrays;

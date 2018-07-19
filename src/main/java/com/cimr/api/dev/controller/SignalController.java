@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cimr.api.dev.model.Signal;
-import com.cimr.api.dev.model.Terminal;
+import com.cimr.api.dev.model.mgr.Signal;
+import com.cimr.api.dev.model.mgr.Terminal;
 import com.cimr.api.dev.service.SignalService;
 import com.cimr.api.dev.service.TerminalService;
 

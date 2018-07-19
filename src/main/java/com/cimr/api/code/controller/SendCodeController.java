@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.code.config.CodeProperties;
-import com.cimr.api.code.model.Message;
+import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.code.po.CodeSenderObject;
 import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.service.RealTimeDateService;
@@ -79,7 +79,7 @@ public class SendCodeController {
 			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return new HttpResult(false,"出现异常，发送失败");
@@ -105,7 +105,7 @@ public class SendCodeController {
 			message = MessageUtil.getMessage(90,2,null, null, null, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");
@@ -131,7 +131,7 @@ public class SendCodeController {
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 
-			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -199,7 +199,7 @@ public class SendCodeController {
 					, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject.getNotify_url());
+			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

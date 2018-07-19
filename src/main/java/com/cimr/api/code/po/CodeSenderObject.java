@@ -14,6 +14,9 @@ public class CodeSenderObject {
 	 * 结果反馈 地址
 	 */
 	private String notify_url;
+	
+	
+	private String codeId;
 
 	
 
@@ -33,6 +36,13 @@ public class CodeSenderObject {
 		this.notify_url = notify_url;
 	}
 
+	public String getCodeId() {
+		return codeId;
+	}
+
+	public void setCodeId(String codeId) {
+		this.codeId = codeId;
+	}
 
 
 	

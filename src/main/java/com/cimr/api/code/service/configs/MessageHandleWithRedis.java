@@ -10,7 +10,7 @@ import org.springframework.data.redis.hash.HashMapper;
 
 import com.alibaba.fastjson.JSON;
 import com.cimr.api.code.config.RedisProperties;
-import com.cimr.api.code.model.Message;
+import com.cimr.api.code.model.mgr.Message;
 import com.cimr.boot.redis.RedisTemplateConfig;
 import com.cimr.boot.redis.utils.MyHashMapper;
 import com.cimr.boot.utils.IdGener;

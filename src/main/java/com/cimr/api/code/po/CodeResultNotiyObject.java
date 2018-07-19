@@ -5,6 +5,8 @@ public class CodeResultNotiyObject {
 	private String return_code;
 	
 	private String return_message;
+	
+	private String codeId;
 
 	public String getReturn_code() {
 		return return_code;
@@ -20,6 +22,14 @@ public class CodeResultNotiyObject {
 
 	public void setReturn_message(String return_message) {
 		this.return_message = return_message;
+	}
+
+	public String getCodeId() {
+		return codeId;
+	}
+
+	public void setCodeId(String codeId) {
+		this.codeId = codeId;
 	}
 	
 	

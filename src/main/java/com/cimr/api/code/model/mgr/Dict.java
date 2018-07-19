@@ -1,9 +1,9 @@
-package com.cimr.api.code.model;
+package com.cimr.api.code.model.mgr;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.cimr.api.dev.model.BaseEntity;
+import com.cimr.api.dev.model.mgr.BaseEntity;
 /**
  * 
  * <p>Title: SysDict</p>

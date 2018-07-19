@@ -16,7 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cimr.api.code.config.CodeProperties;
-import com.cimr.api.code.model.Message;
+import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.code.util.MessageUtil;
 import com.cimr.api.websocket.WebSocketInterImple;
 import com.cimr.api.websocket.config.WebSocketProperties;

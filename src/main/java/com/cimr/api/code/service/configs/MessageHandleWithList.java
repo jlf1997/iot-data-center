@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.alibaba.fastjson.JSON;
-import com.cimr.api.code.model.Message;
+import com.cimr.api.code.model.mgr.Message;
 
 
 /**

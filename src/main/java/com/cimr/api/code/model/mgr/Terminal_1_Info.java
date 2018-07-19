@@ -1,4 +1,4 @@
-package com.cimr.api.code.model;
+package com.cimr.api.code.model.mgr;
 
 import java.util.HashMap;
 import java.util.Map;

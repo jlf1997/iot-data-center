@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.code.service.RealTimeDateService;
 import com.cimr.api.comm.model.TerimalModel;
-import com.cimr.api.dev.model.Terminal;
+import com.cimr.api.dev.model.mgr.Terminal;
 import com.cimr.api.dev.service.TerminalService;
 
 import io.swagger.annotations.Api;

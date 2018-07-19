@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
-import com.cimr.api.dev.jpa.SignalJpa;
-import com.cimr.api.dev.model.Signal;
+import com.cimr.api.dev.jpa.mgr.SignalJpa;
+import com.cimr.api.dev.model.mgr.Signal;
 import com.cimr.boot.jpafinder.Finder;
 
 @Service("signalService")

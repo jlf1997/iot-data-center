@@ -1,4 +1,4 @@
-package com.cimr.api.dev.model;
+package com.cimr.api.dev.model.mgr;
 
 import java.util.Date;
 

@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.cimr.api.code.jpa.DictJpa;
-import com.cimr.api.code.model.Dict;
+import com.cimr.api.code.jpa.mgr.DictJpa;
+import com.cimr.api.code.model.mgr.Dict;
 import com.cimr.boot.jpafinder.Finder;
 
 @Repository

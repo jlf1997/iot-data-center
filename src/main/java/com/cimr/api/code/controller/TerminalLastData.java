@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cimr.api.code.model.Terminal_1_Info;
+import com.cimr.api.code.model.mgr.Terminal_1_Info;
 import com.cimr.api.code.service.RealTimeDateService;
 import com.cimr.api.comm.model.TerimalModel;
 

@@ -2,6 +2,7 @@ package com.cimr.api.code.dao;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -12,14 +13,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.cimr.api.code.jpa.CommandsJpa;
-import com.cimr.api.code.model.Commands;
+import com.cimr.api.code.jpa.mgr.CommandsJpa;
+import com.cimr.api.code.model.mgr.Commands;
 import com.cimr.boot.jpafinder.Finder;
 
 @Repository
 public class CommandsDao extends Finder<Commands,Long>{
 	
-	@Autowired
+	@Resource
 	private CommandsJpa commandsJpa;
 
 	@Override

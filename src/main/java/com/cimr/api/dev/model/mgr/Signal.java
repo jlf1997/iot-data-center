@@ -1,4 +1,4 @@
-package com.cimr.api.dev.model;
+package com.cimr.api.dev.model.mgr;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
