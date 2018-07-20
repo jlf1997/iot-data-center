@@ -9,21 +9,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cimr.api.code.config.CodeProperties;
+import com.cimr.api.code.model.base.CodeHistory;
 import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.code.po.CodeSenderObject;
+import com.cimr.api.code.service.CodeHistoryService;
 import com.cimr.api.code.service.CommandsService;
-import com.cimr.api.code.service.RealTimeDateService;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.code.util.MessageUtil;
 import com.cimr.api.comm.model.HttpResult;
+import com.cimr.boot.model.BaseModel;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,8 +35,9 @@ import io.swagger.annotations.ApiOperation;
 public class SendCodeController {
 	
 	private static final Logger log = LoggerFactory.getLogger(SendCodeController.class);
-
-
+	
+	@Autowired
+	private CodeHistoryService codeHistoryService;
 	
 	@Autowired
 	private MessageHandle handle;
@@ -60,6 +61,7 @@ public class SendCodeController {
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		HttpResult res ;
+	
 		try {
 			String cmdContents = commandsService.getCommandsById(cmdId);
 			//判断指令是否错误
@@ -80,12 +82,19 @@ public class SendCodeController {
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-		} catch (UnsupportedEncodingException e) {
+			CodeHistory codeHistory  = new CodeHistory();
+			codeHistory.setId(BaseModel.genId());
+			codeHistory.setStatus(0);
+			codeHistory.setMessageJson(messageJson);
+			codeHistoryService.save(codeHistory);
+			 res = new HttpResult(true,"发送成功");
+			 res.setData(codeHistory.getId());
+			 return res;
+		} catch (Exception e) {
 			e.printStackTrace();
-			return new HttpResult(false,"出现异常，发送失败");
+			return new HttpResult(false,"数据服务出现异常，发送失败"+e.getMessage());
 		}
-		 res = new HttpResult(true,"发送成功");
-		 return res;
+		
 	}
 	
 	
@@ -96,6 +105,7 @@ public class SendCodeController {
 	public HttpResult sendDebug(
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
+		HttpResult res ;
 		try {
 			if(codeSenderObject==null 
 					||codeSenderObject.getTelIds()==null
@@ -106,11 +116,19 @@ public class SendCodeController {
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-		} catch (UnsupportedEncodingException e) {
+			CodeHistory codeHistory  = new CodeHistory();
+			codeHistory.setId(BaseModel.genId());
+			codeHistory.setStatus(0);
+			codeHistory.setMessageJson(messageJson);
+			codeHistoryService.save(codeHistory);
+			 res = new HttpResult(true,"发送成功");
+			 res.setData(codeHistory.getId());
+			 return res;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");
 		}
-		return new HttpResult(true,"发送成功");
+	
 	}
 	
 	
@@ -120,6 +138,7 @@ public class SendCodeController {
 	public HttpResult sendEndDebug(
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
+		HttpResult res ;
 		try {
 			if(codeSenderObject==null 
 					||codeSenderObject.getTelIds()==null
@@ -132,12 +151,18 @@ public class SendCodeController {
 			log.debug("message:"+messageJson);
 
 			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-			
-		} catch (UnsupportedEncodingException e) {
+			CodeHistory codeHistory  = new CodeHistory();
+			codeHistory.setId(BaseModel.genId());
+			codeHistory.setStatus(0);
+			codeHistory.setMessageJson(messageJson);
+			codeHistoryService.save(codeHistory);
+			 res = new HttpResult(true,"发送成功");
+			 res.setData(codeHistory.getId());
+			 return res;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");
 		}
-		return new HttpResult(true,"发送成功");
 	}
 	
 	
@@ -200,13 +225,19 @@ public class SendCodeController {
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-			
-		} catch (UnsupportedEncodingException e) {
+			CodeHistory codeHistory  = new CodeHistory();
+			codeHistory.setId(BaseModel.genId());
+			codeHistory.setStatus(0);
+			codeHistory.setMessageJson(messageJson);
+			codeHistoryService.save(codeHistory);
+			 res = new HttpResult(true,"发送成功");
+			 res.setData(codeHistory.getId());
+			 return res;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"出现异常，发送失败");
 		}
-		 res = new HttpResult(true,"发送成功");
-		 return res;
+	
 	}
 	
 	

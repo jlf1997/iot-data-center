@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.cimr.boot.jpafinder.DBFinder;
+import com.cimr.boot.utils.IdGener;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +22,11 @@ import io.swagger.annotations.ApiModelProperty;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseModel {
+	
+	public static Long genId() {
+		
+		return IdGener.getInstance().getNormalId();
+	}
 	
 	public BaseModel() {
 		

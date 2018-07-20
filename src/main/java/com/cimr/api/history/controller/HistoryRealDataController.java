@@ -55,6 +55,8 @@ public class HistoryRealDataController {
 		return list;
 	}
 	
+	
+	
 	/**
 	 * 根据信号id 获取终端编号查询对应历史数据
 	 * 只查询给定的字段

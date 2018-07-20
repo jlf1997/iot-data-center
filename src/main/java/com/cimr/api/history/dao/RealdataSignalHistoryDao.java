@@ -34,7 +34,7 @@ public class RealdataSignalHistoryDao {
 	private final String CREATETIME = "gatherMsgTime";
 	
 	@Autowired
-	@Qualifier(HistoryMongoConfig.MONGO_TEMPLATE)
+	@Qualifier("history")
 	protected MongoTemplate histroyTemp;
 	
 	/**

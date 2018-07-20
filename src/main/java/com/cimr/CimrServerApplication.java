@@ -2,11 +2,9 @@ package com.cimr;
 
 import java.io.UnsupportedEncodingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.cimr.api.code.util.MessageUtil;
@@ -19,6 +17,7 @@ import com.cimr.boot.swagger.EnableSwagger2Doc;
 @EnableSwagger2Doc
 @EnableHttpConvert
 @EnableScheduling
+@EnableJpaAuditing
 //@EnableFeignClients
 public class CimrServerApplication {
 	
