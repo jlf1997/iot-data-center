@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import com.cimr.api.code.config.CodeProperties;
 import com.cimr.api.code.dao.CommandsDao;
 import com.cimr.api.code.dao.DictDao;
+import com.cimr.api.code.model.base.CodeHistory;
 import com.cimr.api.code.model.mgr.Commands;
 import com.cimr.api.code.po.CodeResultNotiyObject;
 import com.cimr.api.code.po.CodeSenderObject;
@@ -79,7 +80,6 @@ public class CommandsService {
 	 */
 	public void sendCodeToTerminalByKafka(String message,CodeSenderObject codeSenderObject) {
 		executorService.execute(new Runnable() {
-
 			@Override
 			public void run() {
 				ListenableFuture<SendResult<String, String>>  future = KafkaTemplate.send(codeProperties.getTopicAppToTer(),message);

@@ -2,6 +2,7 @@ package com.cimr.api.code.model.base;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.cimr.boot.model.BaseModel;
@@ -21,6 +22,7 @@ public class CodeHistory extends BaseModel{
 	/**
 	 * 最终发送的消息
 	 */
+	@Lob
 	private String messageJson;
 	
 	private Integer status;

@@ -63,6 +63,11 @@ public class SendCodeController {
 		HttpResult res ;
 	
 		try {
+			if(codeSenderObject==null 
+					||codeSenderObject.getTelIds()==null
+					||codeSenderObject.getTelIds().size()==0) {
+				return new HttpResult(false,"参数错误，发送失败");
+			}
 			String cmdContents = commandsService.getCommandsById(cmdId);
 			//判断指令是否错误
 			if(cmdContents==null ) {
@@ -73,11 +78,7 @@ public class SendCodeController {
 				res = new HttpResult(false,"指令内容为空");
 				return res;
 			}
-			if(codeSenderObject==null 
-					||codeSenderObject.getTelIds()==null
-					||codeSenderObject.getTelIds().size()==0) {
-				return new HttpResult(false,"参数错误，发送失败");
-			}
+		
 			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);

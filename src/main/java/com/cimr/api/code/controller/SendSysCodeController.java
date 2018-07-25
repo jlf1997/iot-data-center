@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cimr.api.code.model.base.CodeHistory;
 import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.code.po.CodeSenderObject;
+import com.cimr.api.code.service.CodeHistoryService;
 import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.util.MessageUtil;
 import com.cimr.api.comm.model.HttpResult;
+import com.cimr.boot.model.BaseModel;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,8 +34,8 @@ public class SendSysCodeController {
 	
 	private static final Logger log = LoggerFactory.getLogger(SendSysCodeController.class);
 
-
-
+	@Autowired
+	private CodeHistoryService codeHistoryService;
 	
 	@Autowired
 	private CommandsService commandsService;
@@ -48,17 +51,21 @@ public class SendSysCodeController {
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		try {
-//			if(codeSenderObject==null 
-//					||codeSenderObject.getTelIds()==null
-//					||codeSenderObject.getTelIds().size()==0) {
-//				return new HttpResult(false,"参数错误，发送失败");
-//			}
-			message = MessageUtil.getSysMessage(version,type,title,request, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+			if(codeSenderObject==null || codeSenderObject.getTelIds()==null) {
+				message = MessageUtil.getSysMessage(version,type,title,request, null);
+			}else {
+				message = MessageUtil.getSysMessage(version,type,title,request, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+			}
+			
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			
+			CodeHistory codeHistory  = new CodeHistory();
+			codeHistory.setId(BaseModel.genId());
+			codeHistory.setStatus(0);
+			codeHistory.setMessageJson(messageJson);
+			codeHistoryService.save(codeHistory);
 			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");
 		}
@@ -74,16 +81,21 @@ public class SendSysCodeController {
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		try {
-//			if(codeSenderObject==null 
-//					||codeSenderObject.getTelIds()==null
-//					||codeSenderObject.getTelIds().size()==0) {
-//				return new HttpResult(false,"参数错误，发送失败");
-//			}
-			message = MessageUtil.getSysMessage(1,50,13,null, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+			if(codeSenderObject==null || codeSenderObject.getTelIds()==null) {
+				message = MessageUtil.getSysMessage(1,50,13,null, null);
+			}else {
+				message = MessageUtil.getSysMessage(1,50,13,null, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+			}
+			
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
+			CodeHistory codeHistory  = new CodeHistory();
+			codeHistory.setId(BaseModel.genId());
+			codeHistory.setStatus(0);
+			codeHistory.setMessageJson(messageJson);
+			codeHistoryService.save(codeHistory);
 			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");
 		}
